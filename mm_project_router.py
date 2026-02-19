@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
-"""Classify repository text files into project buckets.
+"""Route text files into `projects/` category folders using keyword scoring.
 
-The script scans the current working directory for supported text files,
-classifies each file based on keyword matches, and moves files into
-`projects/<category>/`. A `projects/manifest.json` file is generated with the
-original source path and assigned category.
+This router supports dry-run previews, move/copy execution modes, and JSON
+manifests that include source, destination, category, and score details.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import shutil
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Iterable
 
 ROOT = Path.cwd()
-DEST = ROOT / "projects"
+DEFAULT_DEST_DIRNAME = "projects"
 
-CATEGORIES = {
+CATEGORIES: dict[str, list[str]] = {
     "mm_physics_models": [
         "schrodinger",
         "hamiltonian",
@@ -55,30 +56,32 @@ CATEGORIES = {
         "sequence",
         "biological",
     ],
-    "mm_utilities": [
-        "utils",
-        "helper",
-        "config",
-        "parser",
-        "io",
-    ],
+    "mm_utilities": ["utils", "helper", "config", "parser", "io"],
 }
 
 SUPPORTED_EXT = {".py", ".md", ".txt", ".json"}
 UNCLASSIFIED = "mm_unclassified"
-EXCLUDED_DIRS = {"projects", ".git", "__pycache__"}
+EXCLUDED_DIRS = {DEFAULT_DEST_DIRNAME, ".git", "__pycache__", ".venv", "venv"}
+
+
+@dataclass
+class RoutePlan:
+    source: Path
+    destination: Path
+    assigned_project: str
+    score: int
 
 
 def read_text(path: Path) -> str:
-    """Read file content in lowercase, returning an empty string on failure."""
+    """Read file content in lowercase, returning an empty string on read error."""
     try:
-        return path.read_text(errors="ignore").lower()
+        return path.read_text(encoding="utf-8", errors="ignore").lower()
     except OSError:
         return ""
 
 
-def classify(content: str) -> str:
-    """Return the best category for content based on keyword frequency."""
+def classify(content: str) -> tuple[str, int]:
+    """Return the best category and score for content based on keyword matches."""
     scores = {category: 0 for category in CATEGORIES}
 
     for category, keywords in CATEGORIES.items():
@@ -87,11 +90,11 @@ def classify(content: str) -> str:
                 scores[category] += 1
 
     best = max(scores, key=scores.get)
-    return best if scores[best] > 0 else UNCLASSIFIED
+    return (best, scores[best]) if scores[best] > 0 else (UNCLASSIFIED, 0)
 
 
 def unique_target_path(target: Path) -> Path:
-    """Return a non-colliding target path by appending _dupN when needed."""
+    """Return a non-colliding target path by appending _dupN when required."""
     if not target.exists():
         return target
 
@@ -106,35 +109,103 @@ def unique_target_path(target: Path) -> Path:
         counter += 1
 
 
+def iter_candidates(root: Path, script_name: str, dest_dirname: str) -> Iterable[Path]:
+    """Yield candidate files under root that are eligible for routing."""
+    for path in root.rglob("*"):
+        if not path.is_file() or path.suffix.lower() not in SUPPORTED_EXT:
+            continue
+        if path.name == script_name:
+            continue
+        if any(part in EXCLUDED_DIRS or part == dest_dirname for part in path.parts):
+            continue
+        yield path
+
+
+def build_plan(root: Path, dest_root: Path, script_name: str) -> list[RoutePlan]:
+    """Create routing plan for all eligible files."""
+    plans: list[RoutePlan] = []
+    for source in iter_candidates(root, script_name=script_name, dest_dirname=dest_root.name):
+        content = read_text(source)
+        category, score = classify(content)
+        target = unique_target_path(dest_root / category / source.name)
+        plans.append(RoutePlan(source=source, destination=target, assigned_project=category, score=score))
+    return plans
+
+
+def ensure_dest_dirs(dest_root: Path) -> None:
+    """Create destination category directories."""
+    dest_root.mkdir(exist_ok=True)
+    for category in [*CATEGORIES.keys(), UNCLASSIFIED]:
+        (dest_root / category).mkdir(exist_ok=True)
+
+
+def apply_plan(plans: list[RoutePlan], mode: str) -> None:
+    """Execute the routing plan in copy or move mode."""
+    for plan in plans:
+        plan.destination.parent.mkdir(parents=True, exist_ok=True)
+        if mode == "copy":
+            shutil.copy2(plan.source, plan.destination)
+        else:
+            shutil.move(str(plan.source), plan.destination)
+
+
+def write_manifest(dest_root: Path, plans: list[RoutePlan], mode: str, dry_run: bool) -> Path:
+    """Write a JSON manifest for all routed files."""
+    manifest = [
+        {
+            "file": str(plan.source),
+            "destination": str(plan.destination),
+            "assigned_project": plan.assigned_project,
+            "score": plan.score,
+            "mode": mode,
+            "dry_run": dry_run,
+        }
+        for plan in plans
+    ]
+    manifest_path = dest_root / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    return manifest_path
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, default=ROOT, help="Root directory to scan.")
+    parser.add_argument(
+        "--dest",
+        type=Path,
+        default=ROOT / DEFAULT_DEST_DIRNAME,
+        help="Destination root for categorized files.",
+    )
+    parser.add_argument(
+        "--mode",
+        choices=["move", "copy"],
+        default="move",
+        help="How to route files when --execute is set.",
+    )
+    parser.add_argument(
+        "--execute",
+        action="store_true",
+        help="Apply changes. Without this flag, the script performs a dry run only.",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
-    DEST.mkdir(exist_ok=True)
-    manifest: list[dict[str, str]] = []
+    args = parse_args()
+    root = args.root.resolve()
+    dest_root = args.dest.resolve()
 
-    categories = list(CATEGORIES) + [UNCLASSIFIED]
-    for category in categories:
-        (DEST / category).mkdir(exist_ok=True)
+    ensure_dest_dirs(dest_root)
+    plans = build_plan(root=root, dest_root=dest_root, script_name=Path(__file__).name)
 
-    for path in ROOT.rglob("*"):
-        if (
-            path.is_file()
-            and path.suffix.lower() in SUPPORTED_EXT
-            and path.name != Path(__file__).name
-            and not any(part in EXCLUDED_DIRS for part in path.parts)
-        ):
-            content = read_text(path)
-            category = classify(content)
+    if args.execute:
+        apply_plan(plans, mode=args.mode)
 
-            target = unique_target_path(DEST / category / path.name)
-            source_str = str(path)
-            shutil.move(str(path), target)
+    manifest_path = write_manifest(dest_root, plans, mode=args.mode, dry_run=not args.execute)
 
-            manifest.append({"file": source_str, "assigned_project": category})
-
-    with (DEST / "manifest.json").open("w", encoding="utf-8") as file_obj:
-        json.dump(manifest, file_obj, indent=2)
-
-    print("✔ Code scanned, classified, and routed into projects/")
-    print("✔ manifest.json created")
+    print(f"✔ Planned routes: {len(plans)}")
+    print(f"✔ Mode: {'DRY RUN' if not args.execute else args.mode.upper()}")
+    print(f"✔ manifest.json created at: {manifest_path}")
 
 
 if __name__ == "__main__":
