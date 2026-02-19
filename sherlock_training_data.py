@@ -60,6 +60,22 @@ spiritual_meanings = {
 }
 
 
+symbolic_meanings = {
+    "0": {
+        "meaning": "The All, the infinite, the absolute, God",
+        "digital_representation": "https://example.com/digital_representations/0.png",
+    },
+    "1": {
+        "meaning": "Unity, the source, the origin",
+        "digital_representation": "https://example.com/digital_representations/1.png",
+    },
+    "2": {
+        "meaning": "Duality, balance, opposition, the material world",
+        "digital_representation": "https://example.com/digital_representations/2.png",
+    },
+}
+
+
 def image_processing(emoji):
     return {
         "emoji": emoji,
@@ -70,6 +86,16 @@ def image_processing(emoji):
 
 def spiritual_significance(emoji):
     return spiritual_meanings.get(emoji, "Unknown Symbol")
+
+
+def symbolic_significance(symbol):
+    return symbolic_meanings.get(
+        str(symbol),
+        {
+            "meaning": "Unknown Symbol",
+            "digital_representation": "https://example.com/digital_representations/unknown.png",
+        },
+    )
 
 
 def combine_interpretations(visual_interpretation, symbolic_interpretation):
