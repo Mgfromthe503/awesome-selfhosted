@@ -1,0 +1,33 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Local runtime/output artifacts
+*.log
+output.png
+
+# Model/data artifacts generated during local runs
+# Keep committed seed data if added intentionally under data/snippet_projects.
+data/images/raw/
+data/images/annotations.jsonl
+data/processed/
+data/snippet_inbox/
+
+# IDE
+.vscode/
+.idea/
