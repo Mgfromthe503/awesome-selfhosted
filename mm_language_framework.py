@@ -411,6 +411,20 @@ class FuturisticQuantumKeyGenerator:
         return "Error-corrected quantum key"
 
 
+def feedback_adjustment(
+    observed_outcome: float, predicted_outcome: float, coefficients: List[float]
+) -> List[float]:
+    """Apply a simple feedback adjustment across all coefficients.
+
+    The update rule is intentionally simple and deterministic:
+    new_coef = coef + (observed_outcome - predicted_outcome)
+    """
+
+    adjustment_factor = observed_outcome - predicted_outcome
+    adjusted_coefficients = [coef + adjustment_factor for coef in coefficients]
+    return adjusted_coefficients
+
+
 def _demo() -> None:
     mm = MMFramework(
         eth_rpc_url=os.environ.get("MM_ETH_RPC_URL"),
@@ -494,6 +508,17 @@ def _run_tests() -> None:
             qkg = FuturisticQuantumKeyGenerator(8, framework=self.mm)
             self.assertEqual(qkg.get_error_corrected_key(), "Error-corrected quantum key")
             self.assertEqual(len(qkg._raw_key), 8)
+
+        def test_feedback_adjustment_increases_with_positive_error(self):
+            adjusted = feedback_adjustment(1.2, 1.0, [0.1, 0.5, -0.4])
+            self.assertAlmostEqual(adjusted[0], 0.3)
+            self.assertAlmostEqual(adjusted[1], 0.7)
+            self.assertAlmostEqual(adjusted[2], -0.2)
+
+        def test_feedback_adjustment_decreases_with_negative_error(self):
+            adjusted = feedback_adjustment(0.8, 1.0, [1.0, 0.0])
+            self.assertAlmostEqual(adjusted[0], 0.8)
+            self.assertAlmostEqual(adjusted[1], -0.2)
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestMMFramework)
     unittest.TextTestRunner(verbosity=2).run(suite)
