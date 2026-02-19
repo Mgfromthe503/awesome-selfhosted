@@ -1,5 +1,6 @@
 """Training-data-oriented stubs and semantic mappings for Sherlock."""
 
+from textwrap import dedent
 from statistics import mean, pstdev
 
 
@@ -259,6 +260,71 @@ emoji_translator = {
     "8️⃣": "Eight - abundance, power, and karma",
     "9️⃣": "Nine - completion, wisdom, and humanitarianism",
 }
+
+
+polygon_staking_training_script = dedent(
+    """
+    import os
+    from dotenv import load_dotenv
+    from web3 import Web3
+    from brownie import Contract, project
+
+    load_dotenv()
+
+    # Set up the Polygon blockchain interface
+    polygon_rpc_url = os.getenv('POLYGON_RPC_URL')
+    w3 = Web3(Web3.HTTPProvider(polygon_rpc_url))
+
+    # Update the contract addresses
+    token_address = os.getenv('TOKEN_ADDRESS')
+    staking_address = os.getenv('STAKING_ADDRESS')
+
+    # Update the gas prices
+    gas_price = w3.toWei(os.getenv('GAS_PRICE_GWEI'), 'gwei')
+    max_gas = int(os.getenv('MAX_GAS'))
+
+    # Connect to the token contract
+    try:
+        token_contract = Contract.from_abi('Token', address=token_address, abi=project.load('Token').abi)
+    except Exception as e:
+        print(f"Error connecting to token contract: {str(e)}")
+        exit()
+
+    # Connect to the staking contract
+    try:
+        staking_contract = Contract.from_abi('Staking', address=staking_address, abi=project.load('Staking').abi)
+    except Exception as e:
+        print(f"Error connecting to staking contract: {str(e)}")
+        exit()
+
+    # Perform the staking transaction
+    def stake_tokens(amount, account_address, private_key):
+        nonce = w3.eth.get_transaction_count(account_address)
+        tx = staking_contract.functions.stake(amount).buildTransaction({
+            'nonce': nonce,
+            'from': account_address,
+            'value': 0,
+            'gasPrice': gas_price,
+            'gas': max_gas,
+        })
+        signed_tx = w3.eth.account.sign_transaction(tx, private_key=private_key)
+        try:
+            tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        except Exception as e:
+            print(f"Error sending transaction: {str(e)}")
+            return None
+        tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+        return tx_receipt
+    """
+).strip()
+
+
+def get_polygon_staking_training_data():
+    return {
+        "name": "polygon_staking_automation",
+        "network": "polygon",
+        "script": polygon_staking_training_script,
+    }
 
 
 def translate_emoji(emoji):
