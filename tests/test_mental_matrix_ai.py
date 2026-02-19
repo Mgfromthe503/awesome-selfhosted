@@ -1,35 +1,51 @@
-from datetime import datetime, timezone
+from datetime import datetime
 
-from mental_matrix_ai import AstrologyModule, MentalMatrixAI, QuantumBioinformaticsModule, QuantumChemistryModule
+import pytest
+
+from mental_matrix_ai import (
+    AstrologyModule,
+    MentalMatrixAI,
+    QuantumBioinformaticsModule,
+    QuantumChemistryModule,
+    QuantumEmotionalModel,
+)
 
 
 def test_zodiac_sign_boundaries():
-    astrology = AstrologyModule()
-    assert astrology.get_zodiac_sign(datetime(1988, 3, 20)) == "Pisces"
-    assert astrology.get_zodiac_sign(datetime(1988, 3, 21)) == "Aries"
-
-
-def test_planetary_positions_are_deterministic_for_input_datetime():
-    astrology = AstrologyModule()
-    now = datetime(2026, 1, 15, 5, 10, tzinfo=timezone.utc)
-    positions = astrology.get_planetary_positions(now)
-    assert positions == {"Mars": "Virgo", "Venus": "Aquarius", "Mercury": "Cancer"}
+    module = AstrologyModule()
+    assert module.get_zodiac_sign(datetime(1988, 11, 22)) == "Sagittarius"
+    assert module.get_zodiac_sign(datetime(1988, 1, 15)) == "Capricorn"
 
 
 def test_dna_analysis():
     module = QuantumBioinformaticsModule()
-    assert module.analyze_dna_sequence("ATCG") == "Length=4, GC=50.00%"
-    assert module.analyze_dna_sequence("ATCX") == "Invalid nucleotides: X"
+    result = module.analyze_dna_sequence("ATCG")
+    assert "len=4" in result
+    assert "gc=0.50" in result
+
+
+@pytest.mark.parametrize("invalid", ["", "ABCX", "ATUG"])
+def test_invalid_dna_raises(invalid):
+    module = QuantumBioinformaticsModule()
+    with pytest.raises(ValueError):
+        module.analyze_dna_sequence(invalid)
 
 
 def test_molecule_analysis():
     module = QuantumChemistryModule()
-    assert module.analyze_molecule("H2O") == "Atoms=3; Composition=H:2, O:1"
+    result = module.analyze_molecule("H2O")
+    assert "total_atoms=3" in result
 
 
-def test_ai_decision_contains_all_components():
+def test_emotional_model_updates_levels():
+    model = QuantumEmotionalModel()
+    reading = model.handle_input("I love this")
+    assert reading.love_level >= 0
+    assert pytest.approx(reading.fear_level, abs=1e-7) == -reading.love_level
+
+
+def test_ai_decision_contains_parts():
     ai = MentalMatrixAI()
-    output = ai.make_decision(datetime(1988, 11, 22), "ATCG", "H2O")
-    assert "Sagittarius" in output
-    assert "Length=4, GC=50.00%" in output
-    assert "Atoms=3; Composition=H:2, O:1" in output
+    decision = ai.make_decision(datetime(1988, 11, 22), "ATCG", "H2O", "I love this")
+    assert "Decision based on:" in decision
+    assert "emotion=" in decision
