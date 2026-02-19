@@ -1,0 +1,14 @@
+[
+  {
+    "file": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\processed\\vision_checkpoints\\sherlock_vision.pt",
+    "bundled_as": "data\\processed\\checkpoint_bundle\\sherlock_vision.pt",
+    "size_bytes": 98813,
+    "last_write": "2026-02-19T01:01:13.9903906-08:00"
+  },
+  {
+    "file": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\processed\\mm_checkpoints\\sherlock_multimodal.pt",
+    "bundled_as": "data\\processed\\checkpoint_bundle\\sherlock_multimodal.pt",
+    "size_bytes": 630130,
+    "last_write": "2026-02-19T01:01:11.5151409-08:00"
+  }
+]
