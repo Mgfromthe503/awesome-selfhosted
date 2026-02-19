@@ -1,172 +1,130 @@
-#!/usr/bin/env python3
-"""MM language emoji translation and energy analysis utilities."""
+"""MM language parser/executor for Sherlock.
+
+MM language is a lightweight command language inspired by Hermetic principles.
+It is designed for deterministic data generation and detective-style analysis tasks.
+"""
 
 from __future__ import annotations
 
-import argparse
-import math
 from dataclasses import dataclass
+import re
+from typing import Any
 
 
-EMOJI_TRANSLATOR = {
-    "🧄": (
-        "Root Chakra",
-        "Stability, security, basic needs",
-        "Located at the base of the spine",
-        "Balanced by grounding exercises, red foods",
-    ),
-    "🫀": (
-        "Anatomical Heart",
-        "Physical health, circulation, vitality",
-        "Central organ of the circulatory system",
-        "Associated with cardiovascular exercises",
-    ),
-    "💖": (
-        "Heart Emblem",
-        "Love, compassion, emotions",
-        "Symbol of emotional connection",
-        "Associated with relationships, self-love",
-    ),
-    "🫁": (
-        "Lungs",
-        "Breath, life force, vitality",
-        "Essential for respiration",
-        "Associated with air element and pranayama practices",
-    ),
-    "🧠": (
-        "Brain",
-        "Intellect, thinking, reasoning",
-        "Central organ of the nervous system",
-        "Associated with cognitive functions",
-    ),
-    "🫅": (
-        "Kidneys",
-        "Filtering blood, removing waste",
-        "Essential organ of the urinary system",
-        "Associated with detoxification",
-    ),
-    "🫓": (
-        "Liver",
-        "Metabolism, detoxification, nutrient storage",
-        "Vital organ of digestion",
-        "Associated with a healthy diet",
-    ),
-    "🫑": (
-        "Stomach",
-        "Digestion, food processing",
-        "Main organ of digestion",
-        "Associated with a balanced diet and mindful eating",
-    ),
-    "💧": (
-        "Water Element",
-        "Emotion, intuition, subconscious",
-        "Cancer, Scorpio, Pisces",
-        "07/20/2023 (Cancer season)",
-    ),
-    "🌕": (
-        "Full Moon",
-        "Completion, illumination, realization",
-        "Influence on high tide, full energy",
-        "08/12/2023 (Next Full Moon)",
-    ),
-    "🌑": (
-        "New Moon",
-        "New beginnings, fresh start",
-        "Influence on planting, setting intentions",
-        "07/28/2023 (Next New Moon)",
-    ),
-    "🔥": (
-        "Fire Element",
-        "Passion, transformation, willpower",
-        "Aries, Leo, Sagittarius",
-        "08/23/2023 (Leo season)",
-    ),
+_HERMETIC = {
+    "Correspondence": "As above, so below; as within, so without.",
+    "Vibration": "Nothing rests; everything moves; everything vibrates.",
+    "Polarity": "Everything has its opposite; opposites differ in degree.",
+    "Rhythm": "Everything flows in cycles and patterns.",
+    "Cause & Effect": "Every cause has its effect; every effect has its cause.",
+    "Gender": "Masculine and feminine principles are present in everything.",
 }
 
 
-@dataclass(frozen=True)
-class EmojiDetails:
-    meaning: str
-    attributes: str
-    influences: str
-    example_date: str
+@dataclass
+class MMInstruction:
+    op: str
+    payload: dict[str, Any]
 
 
-class EmojiParser:
-    """Translate emojis and provide a simple energy-state simulation."""
+class MMLanguageError(ValueError):
+    pass
 
-    def __init__(self, emoji_dict: dict[str, tuple[str, str, str, str]]):
-        self.emoji_dict = emoji_dict
 
-    def parse_emoji(self, emoji: str) -> EmojiDetails:
-        details = self.emoji_dict.get(emoji, ("Unknown Emoji", "", "", ""))
-        return EmojiDetails(*details)
+def anomaly_detection(data: list[float]) -> list[bool]:
+    if not data:
+        return []
+    avg = sum(data) / len(data)
+    var = sum((x - avg) ** 2 for x in data) / len(data)
+    sigma = var ** 0.5 or 1.0
+    return [abs(value - avg) > (2 * sigma) for value in data]
 
-    def format_emoji_info(self, emoji: str) -> str:
-        details = self.parse_emoji(emoji)
-        return (
-            f"Emoji: {emoji}\n"
-            f"Meaning: {details.meaning}\n"
-            f"Attributes: {details.attributes}\n"
-            f"Influences: {details.influences}\n"
-            f"Example Date: {details.example_date}"
-        )
 
-    def _simulate_single_qubit(self, gate: str) -> tuple[complex, complex]:
-        if gate == "h":
-            amp = 1 / math.sqrt(2)
-            return (complex(amp, 0), complex(amp, 0))
-        if gate == "x":
-            return (0j, 1 + 0j)
-        if gate == "z":
-            return (1 + 0j, 0j)
-        return (1 + 0j, 0j)
+def _parse_detect(line: str) -> MMInstruction:
+    match = re.match(r"^DETECT\s+(.+?)\s+IN\s+(.+)$", line, flags=re.IGNORECASE)
+    if not match:
+        raise MMLanguageError(f"Invalid DETECT syntax: {line}")
+    return MMInstruction("DETECT", {"pattern": match.group(1).strip(), "text": match.group(2).strip()})
 
-    def analyze_energy(self, emoji: str) -> str:
-        details = self.parse_emoji(emoji)
-        if details.meaning == "Unknown Emoji":
-            return "Cannot analyze unknown emoji."
 
-        if "Chakra" in details.meaning:
-            gate = "h"
-            label = "balance"
-        elif "Element" in details.meaning:
-            gate = "x"
-            label = "transformation"
-        elif "Heart" in details.meaning or "Brain" in details.meaning:
-            gate = "z"
-            label = "stability"
+def _parse_anomaly(line: str) -> MMInstruction:
+    match = re.match(r"^ANOMALY\s+SERIES\s*:\s*(.+)$", line, flags=re.IGNORECASE)
+    if not match:
+        raise MMLanguageError(f"Invalid ANOMALY syntax: {line}")
+    raw = [p.strip() for p in match.group(1).split(",") if p.strip()]
+    try:
+        series = [float(x) for x in raw]
+    except ValueError as exc:
+        raise MMLanguageError(f"Invalid numeric value in ANOMALY series: {line}") from exc
+    return MMInstruction("ANOMALY", {"series": series})
+
+
+def _parse_tag(line: str) -> MMInstruction:
+    match = re.match(r"^TAG\s+([A-Za-z0-9_\-]+)\s*=\s*(.+)$", line, flags=re.IGNORECASE)
+    if not match:
+        raise MMLanguageError(f"Invalid TAG syntax: {line}")
+    return MMInstruction("TAG", {"key": match.group(1), "value": match.group(2).strip()})
+
+
+def _parse_hermetic(line: str) -> MMInstruction:
+    principle = line.replace("🔮", "", 1).strip()
+    if principle not in _HERMETIC:
+        raise MMLanguageError(f"Unknown Hermetic principle: {principle}")
+    return MMInstruction("HERMETIC", {"principle": principle, "meaning": _HERMETIC[principle]})
+
+
+def parse_mm_script(script: str) -> list[MMInstruction]:
+    if script is None:
+        raise MMLanguageError("Script cannot be None")
+
+    instructions: list[MMInstruction] = []
+    for raw in script.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+
+        if line.startswith("🔮"):
+            instructions.append(_parse_hermetic(line))
+            continue
+
+        upper = line.upper()
+        if upper.startswith("DETECT "):
+            instructions.append(_parse_detect(line))
+        elif upper.startswith("ANOMALY SERIES"):
+            instructions.append(_parse_anomaly(line))
+        elif upper.startswith("TAG "):
+            instructions.append(_parse_tag(line))
         else:
-            gate = "id"
-            label = "neutral"
+            raise MMLanguageError(f"Unknown MM instruction: {line}")
 
-        statevector = self._simulate_single_qubit(gate)
-        return (
-            f"Quantum-like energy state for {details.meaning} ({emoji})\n"
-            f"Applied gate: {gate.upper()} ({label})\n"
-            f"Statevector: [{statevector[0]}, {statevector[1]}]"
-        )
+    return instructions
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("emoji", nargs="?", default="🧄", help="Emoji to translate")
-    parser.add_argument(
-        "--energy",
-        action="store_true",
-        help="Also print energy-state analysis for the selected emoji.",
-    )
-    return parser.parse_args()
+def execute_mm_instructions(instructions: list[MMInstruction]) -> list[dict[str, Any]]:
+    results: list[dict[str, Any]] = []
+    tags: dict[str, str] = {}
+
+    for ins in instructions:
+        if ins.op == "HERMETIC":
+            results.append({"op": ins.op, "result": ins.payload})
+        elif ins.op == "DETECT":
+            pattern = ins.payload["pattern"]
+            text = ins.payload["text"]
+            found = pattern.lower() in text.lower()
+            results.append({"op": ins.op, "result": {"pattern": pattern, "found": found}})
+        elif ins.op == "ANOMALY":
+            series = ins.payload["series"]
+            flags = anomaly_detection(series)
+            indexes = [idx for idx, flag in enumerate(flags) if flag]
+            results.append({"op": ins.op, "result": {"series": series, "anomaly_indexes": indexes}})
+        elif ins.op == "TAG":
+            tags[str(ins.payload["key"])] = str(ins.payload["value"])
+            results.append({"op": ins.op, "result": {"tags": dict(tags)}})
+        else:
+            raise MMLanguageError(f"Unsupported op: {ins.op}")
+
+    return results
 
 
-def main() -> None:
-    args = parse_args()
-    parser = EmojiParser(EMOJI_TRANSLATOR)
-    print(parser.format_emoji_info(args.emoji))
-    if args.energy:
-        print()
-        print(parser.analyze_energy(args.emoji))
-
-
-if __name__ == "__main__":
-    main()
+def run_mm_script(script: str) -> list[dict[str, Any]]:
+    return execute_mm_instructions(parse_mm_script(script))
