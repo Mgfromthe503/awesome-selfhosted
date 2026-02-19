@@ -3,6 +3,16 @@
 from statistics import mean, pstdev
 
 
+def sherlock_mission():
+    """Return Sherlock's mission statement and print it for quick CLI usage."""
+    message = (
+        "Hello Sherlock! Your mission is to help people find the information they need "
+        "and to make the world a better place."
+    )
+    print(message)
+    return message
+
+
 class EmojiParser:
     def __init__(self):
         self.emoji_map = {
