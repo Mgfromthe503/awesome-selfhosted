@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>12D Dodecahedron — Solfeggio / Fibonacci / φ Mapping</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0f1220; color: #e9eefc; }
+    #plot { width: 100vw; height: 86vh; }
+    .panel { padding: 12px 16px; line-height: 1.3; }
+    .meta { opacity: 0.85; font-size: 0.92rem; }
+    code { background: #20263d; padding: 1px 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h2 style="margin:0 0 6px;">Interactive 12D Dodecahedron</h2>
+    <div class="meta">
+      20 dodecahedron vertices are embedded in 12D, ordered by Fibonacci index, and projected to 3D with a φ-weighted matrix.
+      Hover points for vertex metadata (frequency, Fibonacci number, φ-scaling).
+    </div>
+  </div>
+  <div id="plot"></div>
+
+  <script>
+    const phi = (1 + Math.sqrt(5)) / 2;
+
+    // Canonical dodecahedron vertices (20 points)
+    const verts3 = [];
+    // (±1, ±1, ±1)
+    for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) {
+      verts3.push([sx, sy, sz]);
+    }
+    // (0, ±1/φ, ±φ)
+    for (const sy of [-1, 1]) for (const sz of [-1, 1]) {
+      verts3.push([0, sy / phi, sz * phi]);
+    }
+    // (±1/φ, ±φ, 0)
+    for (const sx of [-1, 1]) for (const sy of [-1, 1]) {
+      verts3.push([sx / phi, sy * phi, 0]);
+    }
+    // (±φ, 0, ±1/φ)
+    for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
+      verts3.push([sx * phi, 0, sz / phi]);
+    }
+
+    // Fibonacci sequence (20 terms)
+    const fib = [1, 1];
+    while (fib.length < 20) fib.push(fib[fib.length - 1] + fib[fib.length - 2]);
+    const maxFib = fib[fib.length - 1];
+
+    // Build 12D embeddings per vertex.
+    // dims 0..2 = dodecahedron geometry, 3..11 = φ/Fibonacci harmonic components
+    const verts12 = verts3.map(([x, y, z], i) => {
+      const fn = fib[i] / maxFib;
+      const v = new Array(12).fill(0);
+      v[0] = x;
+      v[1] = y;
+      v[2] = z;
+      for (let d = 3; d < 12; d++) {
+        v[d] = Math.sin((i + 1) * (d - 1) * Math.PI / 20) * Math.pow(phi, -(d - 2)) * (0.4 + fn);
+      }
+      return v;
+    });
+
+    // φ-weighted 12D -> 3D projection matrix
+    const P = [
+      Array.from({length: 12}, (_, d) => Math.cos((d + 1) * 0.7) * Math.pow(phi, -d * 0.2)),
+      Array.from({length: 12}, (_, d) => Math.sin((d + 1) * 0.9) * Math.pow(phi, -d * 0.2)),
+      Array.from({length: 12}, (_, d) => Math.cos((d + 1) * 0.5 + 1.2) * Math.pow(phi, -d * 0.2)),
+    ];
+
+    function project(v12) {
+      return P.map(row => row.reduce((sum, w, d) => sum + w * v12[d], 0));
+    }
+
+    const proj = verts12.map(project);
+
+    // Unique Solfeggio-like assignment across 20 vertices (396..1260 Hz)
+    const fMin = 396, fMax = 1260;
+    const freqs = Array.from({length: 20}, (_, i) => +(fMin + (fMax - fMin) * i / 19).toFixed(2));
+
+    // Build edge list by canonical nearest-neighbor distance in 3D model
+    const edgePairs = [];
+    const target = 2 / phi; // edge length for this coordinate set
+    for (let i = 0; i < verts3.length; i++) {
+      for (let j = i + 1; j < verts3.length; j++) {
+        const dx = verts3[i][0] - verts3[j][0];
+        const dy = verts3[i][1] - verts3[j][1];
+        const dz = verts3[i][2] - verts3[j][2];
+        const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+        if (Math.abs(dist - target) < 1e-6) edgePairs.push([i, j]);
+      }
+    }
+
+    const edgeX = [], edgeY = [], edgeZ = [];
+    for (const [a, b] of edgePairs) {
+      edgeX.push(proj[a][0], proj[b][0], null);
+      edgeY.push(proj[a][1], proj[b][1], null);
+      edgeZ.push(proj[a][2], proj[b][2], null);
+    }
+
+    const points = {
+      type: 'scatter3d',
+      mode: 'markers',
+      x: proj.map(p => p[0]),
+      y: proj.map(p => p[1]),
+      z: proj.map(p => p[2]),
+      text: verts12.map((v, i) => `Vertex ${i + 1}<br>Frequency: ${freqs[i]} Hz<br>Fibonacci: ${fib[i]}<br>φ-map: φ^${(i % 12) + 1}<br>12D seed: [${v.slice(0,6).map(n => n.toFixed(3)).join(', ')}, ...]`),
+      hovertemplate: '%{text}<extra></extra>',
+      marker: {
+        size: 7,
+        color: freqs,
+        colorscale: 'Turbo',
+        colorbar: { title: 'Hz' },
+        line: { color: '#fff', width: 0.5 }
+      },
+      name: 'Vertices'
+    };
+
+    const edges = {
+      type: 'scatter3d',
+      mode: 'lines',
+      x: edgeX,
+      y: edgeY,
+      z: edgeZ,
+      line: { color: 'rgba(255,255,255,0.4)', width: 3 },
+      hoverinfo: 'skip',
+      name: 'Edges'
+    };
+
+    const layout = {
+      paper_bgcolor: '#0f1220',
+      plot_bgcolor: '#0f1220',
+      font: { color: '#e9eefc' },
+      margin: { l: 0, r: 0, t: 0, b: 0 },
+      scene: {
+        xaxis: { title: 'Projected X', gridcolor: '#2a3150' },
+        yaxis: { title: 'Projected Y', gridcolor: '#2a3150' },
+        zaxis: { title: 'Projected Z', gridcolor: '#2a3150' },
+        camera: { eye: { x: 1.4, y: 1.4, z: 1.2 } }
+      },
+      legend: { x: 0.02, y: 0.98 }
+    };
+
+    Plotly.newPlot('plot', [edges, points], layout, {responsive: true, displaylogo: false});
+  </script>
+</body>
+</html>
