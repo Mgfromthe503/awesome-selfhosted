@@ -324,6 +324,95 @@ class Agent:
         return "cooperate" if (self_love + other_love) >= 1.0 else "observe"
 
 
+class SupervisedLearningModel:
+    """Simple deterministic supervised-model stub for local workflows."""
+
+    def train(self, data):
+        return {"trained": True, "samples": len(data) if data else 0}
+
+    def predict(self, input_data):
+        return {"prediction": "supervised", "input": input_data}
+
+    def analyze_performance(self):
+        return {"model": "supervised", "score": 0.9}
+
+    def get_response_time(self):
+        return 0.12
+
+    def evaluate_stability(self):
+        return {"model": "supervised", "stable": True}
+
+
+class ReinforcementLearningModel:
+    """Simple deterministic reinforcement-model stub for local workflows."""
+
+    def train(self, environment):
+        return {"trained": True, "environment": environment}
+
+    def act(self, state):
+        return {"action": "explore", "state": state}
+
+    def analyze_performance(self):
+        return {"model": "reinforcement", "score": 0.8}
+
+    def get_response_time(self):
+        return 0.18
+
+    def evaluate_stability(self):
+        return {"model": "reinforcement", "stable": False}
+
+
+class AISystemManager:
+    """Switches between supervised and reinforcement models based on feedback."""
+
+    def __init__(self, supervised_model, reinforcement_model):
+        self.supervised_model = supervised_model
+        self.reinforcement_model = reinforcement_model
+        self.current_model = self.supervised_model
+
+    def switch_model(self, model_type):
+        if model_type == "Supervised":
+            self.current_model = self.supervised_model
+        elif model_type == "Reinforcement":
+            self.current_model = self.reinforcement_model
+        else:
+            raise ValueError(f"Unrecognized model type: {model_type}")
+
+    def feedback_handler(self, feedback):
+        if feedback.performance_issue():
+            self.switch_model("Reinforcement")
+        elif feedback.stability_issue():
+            self.switch_model("Supervised")
+
+    def analyze_model_performance(self):
+        return self.current_model.analyze_performance()
+
+    def get_response_time(self):
+        return self.current_model.get_response_time()
+
+    def get_model_stability(self):
+        return self.current_model.evaluate_stability()
+
+
+def run_feedback_loop(ai_manager, feedback_source, max_iterations=10):
+    """Run a bounded feedback loop for safe automation in tests and scripts."""
+
+    events = []
+    for _ in range(max_iterations):
+        feedback = feedback_source()
+        if feedback is None:
+            break
+        ai_manager.feedback_handler(feedback)
+        events.append(
+            {
+                "performance": ai_manager.analyze_model_performance(),
+                "response_time": ai_manager.get_response_time(),
+                "stability": ai_manager.get_model_stability(),
+            }
+        )
+    return events
+
+
 def quantum_key_generation(num_qubits):
     # Placeholder deterministic key generator for testability
     return {"key": ("10" * (num_qubits // 2 + 1))[:num_qubits], "qubits": num_qubits}
