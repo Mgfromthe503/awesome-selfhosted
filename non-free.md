@@ -20,8 +20,10 @@
   - [Document Management - E-books](#document-management---e-books)
   - [E-commerce](#e-commerce)
   - [File Transfer & Synchronization](#file-transfer--synchronization)
+  - [File Transfer - Object Storage & File Servers](#file-transfer---object-storage--file-servers)
   - [Games](#games)
   - [Games - Administrative Utilities & Control Panels](#games---administrative-utilities--control-panels)
+  - [Generative Artificial Intelligence (GenAI)](#generative-artificial-intelligence-genai)
   - [Knowledge Management Tools](#knowledge-management-tools)
   - [Maps and Global Positioning System (GPS)](#maps-and-global-positioning-system-gps)
   - [Media Streaming - Video Streaming](#media-streaming---video-streaming)
@@ -73,12 +75,12 @@
 
 **[`^        back to top        ^`](##awesome-selfhosted---non-free-software)**
 
-- [Chaskiq](https://chaskiq.io) - Full featured live chat, help center and CRM (alternative to Intercom & Drift and Crisp). ([Source Code](https://github.com/chaskiq/chaskiq)) `AGPL-3.0/Commons-Clause` `Ruby`
 - [Chatwoot](https://www.chatwoot.com) - Customer communication platform (alternative to Intercom and Zendesk). ([Source Code](https://github.com/chatwoot/chatwoot)) `⊘ Proprietary` `Ruby/Docker/K8S`
 - [Groupboard](https://www.groupboard.com/products/) - Online whiteboard, audio/video conferencing, screen sharing, shared code editing and optional session recording/playback. `⊘ Proprietary` `Unknown`
+- [Mattermost](https://mattermost.com/) - Platform for secure collaboration across the entire software development lifecycle, can be integrated with Gitlab (alternative to Slack). ([Source Code](https://github.com/mattermost/mattermost)) `⊘ Proprietary` `Go/Docker/K8S`
 - [PrivMX WebMail](https://privmx.com) - Alternative private mail system - web-based, end-to-end encrypted by design, self-hosted, decentralized, uses independent PKI. Easy to install and administrate, freeware, open-source. `⊘ Proprietary` `PHP`
 - [Virola Messenger](https://virola.io/) - Instant messaging and collaboration tool with private and group chat rooms, continuous voice and video meetings, files sharing, issue tracking with integrated task board (alternative to Slack). `⊘ Proprietary` `C++`
-- [WorkAdventure](https://workadventu.re) - Virtual office / virtual conference application presented as a 16-bit RPG video game. ([Demo](https://play.staging.workadventu.re/@/tcm/workadventure/wa-village), [Source Code](https://github.com/thecodingmachine/workadventure/)) `AGPL-3.0/Commons-Clause` `Docker`
+- [WorkAdventure](https://workadventu.re) - Virtual office / virtual conference application presented as a 16-bit RPG video game. ([Demo](https://play.staging.workadventu.re/@/tcm/workadventure/wa-village), [Source Code](https://github.com/workadventure/workadventure)) `AGPL-3.0/Commons-Clause` `Docker`
 
 
 ### Communication - Email - Complete Solutions
@@ -125,6 +127,7 @@
 - [Cluster Control](https://severalnines.com/clustercontrol/) - Setup many databases in few clicks with monitoring, load balancing and more. `⊘ Proprietary` `deb/Ansible/Shell/Docker`
 - [Directus](https://directus.io/) - An Instant App & API for your SQL Database. Directus wraps your new or existing SQL database with a realtime GraphQL+REST API for developers, and an intuitive admin app for non-technical users. ([Source Code](https://github.com/directus/directus)) `BUSL-1.1` `Nodejs/Docker`
 - [MindsDB](https://mindsdb.com/) - AI layer for existing databases that allows you to effortlessly develop, train and deploy state-of-the-art machine learning models using standard queries. ([Source Code](https://github.com/mindsdb/mindsdb)) `Elastic-2.0` `Docker/Python`
+- [NocoDB](https://www.nocodb.com/) - No-code platform that turns any database into a smart spreadsheet (alternative to Airtable and Smartsheet). ([Source Code](https://github.com/nocodb/nocodb)) `SUL-1.0` `Nodejs/Docker`
 
 
 ### Document Management - E-books
@@ -147,9 +150,16 @@
 
 **[`^        back to top        ^`](##awesome-selfhosted---non-free-software)**
 
-- [FileRun](https://www.filerun.com/) - Complete solution for your files with integration with Google and Office. ([Demo](https://www.filerun.com/demo)) `⊘ Proprietary` `PHP`
+- [FileRun](https://filerun.com/) - Complete solution for your files with integration with Google and Office. ([Demo](https://filerun.com/demo)) `⊘ Proprietary` `PHP`
 - [Resilio Sync](https://www.resilio.com/) - Proprietary peer-to-peer file synchronisation tool. `⊘ Proprietary` `Unknown`
 - [Yetishare](https://yetishare.com) - Powerful file hosting script with support for Amazon S3, Wasabi, Backblaze, local, direct and SFTP storage. ([Demo](https://fhscript.com)) `⊘ Proprietary` `PHP`
+
+
+### File Transfer - Object Storage & File Servers
+
+**[`^        back to top        ^`](##awesome-selfhosted---non-free-software)**
+
+- [sftpgo Community Edition](https://github.com/drakkan/sftpgo) - Flexible, fully featured and highly configurable SFTP server with optional FTP/S and WebDAV support. `AGPL-3.0/⊘ Proprietary` `Go/deb/Docker`
 
 
 ### Games
@@ -165,6 +175,13 @@
 **[`^        back to top        ^`](##awesome-selfhosted---non-free-software)**
 
 - [GameVault](https://gamevau.lt) - Organize, download, and play DRM-free games from your own server, complete with metadata enrichment and user-friendly interface. ([Demo](https://demo.gamevau.lt), [Source Code](https://github.com/Phalcode/gamevault-backend)) `CC-BY-NC-SA-4.0` `Nodejs/Docker`
+
+
+### Generative Artificial Intelligence (GenAI)
+
+**[`^        back to top        ^`](##awesome-selfhosted---non-free-software)**
+
+- [LobeHub](https://www.lobehub.com) - Modern design AI chat framework supporting multiple AI providers, one click install MCP Marketplace and Artifacts / Thinking. ([Demo](https://www.lobechat.com), [Source Code](https://github.com/lobehub/lobe-chat), [Clients](https://lobehub.com/mcp)) `⊘ Proprietary` `Nodejs/Docker`
 
 
 ### Knowledge Management Tools
@@ -213,7 +230,6 @@
 
 **[`^        back to top        ^`](##awesome-selfhosted---non-free-software)**
 
-- [Lomorage](https://lomorage.com/) - Google photo alternative via simple self-hosting software. Supported clients: iOS, Android, Web, MAC/Windows. Backend can run on Raspberry pi, Armbian, MAC/Windows/Linux. ([Source Code](https://github.com/lomorage/homepage)) `⊘ Proprietary` `Go`
 - [PhotoStructure](https://photostructure.com/) - All your family's photos and videos automatically organized into a fun and beautiful website. Runs via Docker, NodeJS, or native desktop installers. `⊘ Proprietary` `Nodejs`
 - [Reservo](https://reservo.co) - Scalable image hosting script with support for CDNs, paid account upgrades, advertising spots and drag & drop upload. ([Demo](https://demo.reservo.co/)) `⊘ Proprietary` `PHP`
 - [Single File PHP Gallery](http://sye.dk/sfpg/) - Web gallery in one single PHP file. `⊘ Proprietary` `PHP`
@@ -287,6 +303,7 @@
 - [BitBucket Server](https://www.atlassian.com/software/bitbucket/enterprise/data-center) - Enterprise-level Git solution (alternative to GitLab). `⊘ Proprietary` `Java`
 - [Buddy Enterprise](https://buddy.works/) - Git and Continuous Integration/Delivery Platform. `⊘ Proprietary` `Nodejs/Java`
 - [Crucible](https://www.atlassian.com/software/crucible) - Peer code review application. `⊘ Proprietary` `Java`
+- [eigenfocus](https://eigenfocus.com/) - Project Management, Planning and Time Tracking app. From solo projects to multi-member teams, Eigenfocus adapts to your workflow. ([Source Code](https://github.com/Eigenfocus/eigenfocus)) `⊘ Proprietary` `Docker`
 - [Kanban Tool](https://kanbantool.com/kanban-tool-on-site) - Advanced Kanban boards with time tracking. `⊘ Proprietary` `Ruby`
 - [Kantree](https://kantree.io) - Work management and collaboration. `⊘ Proprietary` `Python`
 - [Solo](https://www.getsoloapp.com/) - Free project management app created for freelancers. Create contacts, manage tasks, upload files, track project progress, and keep notes. ([Demo](https://www.getsoloapp.com/demo/)) `⊘ Proprietary` `PHP`
@@ -348,5 +365,6 @@
 - `Elastic-2.0` - [Elastic License 2.0](https://spdx.org/licenses/Elastic-2.0.html)
 - `NPOSL-3.0` - [Non-Profit Open Software License 3.0](https://spdx.org/licenses/NPOSL-3.0.html)
 - `SSPL-1.0` - [Server Side Public License](https://spdx.org/licenses/SSPL-1.0.html)
+- `SUL-1.0` - [Sustainable Use License v1.0](https://spdx.org/licenses/SUL-1.0.html)
 - `⊘ Proprietary` - [Proprietary software](https://en.wikipedia.org/wiki/Proprietary_software)
 
