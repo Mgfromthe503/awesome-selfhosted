@@ -161,6 +161,20 @@
       "💧": "Emotion and intuition",
       "🌿": "Growth and healing"
     },
+    "symbolic_meanings": {
+      "0": {
+        "meaning": "The All, the infinite, the absolute, God",
+        "digital_representation": "https://example.com/digital_representations/0.png"
+      },
+      "1": {
+        "meaning": "Unity, the source, the origin",
+        "digital_representation": "https://example.com/digital_representations/1.png"
+      },
+      "2": {
+        "meaning": "Duality, balance, opposition, the material world",
+        "digital_representation": "https://example.com/digital_representations/2.png"
+      }
+    },
     "futuristic_qkg_methods": [
       "analyze_security",
       "apply_quantum_error_correction",
