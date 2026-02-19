@@ -116,7 +116,8 @@ def iter_candidates(root: Path, script_name: str, dest_dirname: str) -> Iterable
             continue
         if path.name == script_name:
             continue
-        if any(part in EXCLUDED_DIRS or part == dest_dirname for part in path.parts):
+        relative_parts = path.relative_to(root).parts
+        if any(part in EXCLUDED_DIRS or part == dest_dirname for part in relative_parts):
             continue
         yield path
 
