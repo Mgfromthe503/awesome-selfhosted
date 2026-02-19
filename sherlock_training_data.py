@@ -1,6 +1,7 @@
 """Training-data-oriented stubs and semantic mappings for Sherlock."""
 
 from statistics import mean, pstdev
+from pathlib import Path
 
 
 class EmojiParser:
@@ -397,4 +398,29 @@ def main_training_demo():
         "agent_reaction": a1.react(a2),
         "quantum_key": quantum_key_generation(5),
         "emoji_translation": translate_emoji("🌞"),
+    }
+
+try:
+    from alpha_mind_gamma_model import export_training_jsonl as alpha_export_training_jsonl
+
+    _HAS_ALPHA_MIND_GAMMA = True
+except Exception:
+    alpha_export_training_jsonl = None
+    _HAS_ALPHA_MIND_GAMMA = False
+
+def export_alpha_training_jsonl(path="data/processed/alpha_training.jsonl", size=300, seed=143, train_ratio=0.8):
+    """Export Alpha Mind Gamma prompt/completion JSONL for Sherlock fine-tuning."""
+    if not _HAS_ALPHA_MIND_GAMMA:
+        raise RuntimeError("alpha_mind_gamma_model is not available")
+    out = Path(path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    return str(alpha_export_training_jsonl(out, size=size, seed=seed, train_ratio=train_ratio))
+
+
+def sherlock_training_capabilities():
+    return {
+        "alpha_mind_gamma_export": _HAS_ALPHA_MIND_GAMMA,
+        "emoji_parser_symbols": len(EmojiParser().emoji_map),
+        "emoji_translator_symbols": len(emoji_translator),
+        "knowledge_base_symbols": len(mm_emoji_knowledge_base),
     }
