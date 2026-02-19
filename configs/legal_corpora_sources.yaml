@@ -1,0 +1,51 @@
+# Approved legal/public sources for Sherlock training corpus
+# Only include sources with explicit permissions or clear public-domain/open licenses.
+
+sources:
+  - id: arxiv
+    name: arXiv
+    category: physics_math_papers
+    license: open-access
+    url: https://arxiv.org
+    notes: "Use arXiv API metadata + linked PDFs where permitted."
+
+  - id: openstax
+    name: OpenStax
+    category: textbooks
+    license: CC BY
+    url: https://openstax.org
+    notes: "Prefer official downloadable textbook formats with attribution."
+
+  - id: wikibooks
+    name: Wikibooks
+    category: textbooks_reference
+    license: CC BY-SA
+    url: https://www.wikibooks.org
+    notes: "Keep attribution and share-alike obligations in downstream outputs."
+
+  - id: project_gutenberg_math
+    name: Project Gutenberg (Math/Physics)
+    category: public_domain_books
+    license: public-domain
+    url: https://www.gutenberg.org
+    notes: "Filter for clearly public-domain content only."
+
+  - id: nasa_techreports
+    name: NASA Technical Reports Server
+    category: scientific_reports
+    license: public/government works where applicable
+    url: https://ntrs.nasa.gov
+    notes: "Validate report-level reuse terms before ingestion."
+
+  - id: internet_archive_public_domain
+    name: Internet Archive (Public Domain Collections)
+    category: historical_books
+    license: mixed
+    url: https://archive.org
+    notes: "Ingest only public-domain/openly licensed items."
+
+compliance:
+  require_attribution: true
+  require_license_metadata: true
+  block_unknown_license: true
+  block_restricted_or_paywalled_content: true
