@@ -14,10 +14,29 @@ class SacredGeometryToolkitTests(unittest.TestCase):
         self.assertEqual(len(cube["vertices"]), 8)
         self.assertEqual(cube["solid"], "cube")
 
-    def test_astro_translation(self):
-        mapped = sgt.translate_astrological_numbers([1, 12, 13])
+    def test_astro_translation_extended_cycle(self):
+        mapped = sgt.translate_astrological_numbers([1, 12, 13, 36, 37])
         self.assertEqual(mapped[0]["shape"], "circle")
-        self.assertEqual(mapped[2]["shape"], "circle")
+        self.assertEqual(mapped[1]["shape"], "dodecagon")
+        self.assertEqual(mapped[2]["shape"], "flower of life")
+        self.assertEqual(mapped[3]["shape"], "star tetrahedron")
+        self.assertEqual(mapped[4]["shape"], "circle")
+
+    def test_shape_knowledge_is_large(self):
+        shapes = sgt.list_supported_shapes()
+        self.assertGreaterEqual(len(shapes), 40)
+        self.assertIn("dodecahedron", shapes)
+
+    def test_symbolic_profile(self):
+        profile = sgt.get_symbolic_profile("metatron's cube")
+        self.assertEqual(profile["type"], "symbol")
+        self.assertEqual(profile["value"], 2)
+
+    def test_training_record_generation(self):
+        records = sgt.generate_symbolic_training_records()
+        self.assertGreater(len(records), 45)
+        self.assertTrue(any(r["source"] == "shape_knowledge" for r in records))
+        self.assertTrue(any(r["source"] == "symbol_knowledge" for r in records))
 
     def test_resonance(self):
         freq = sgt.calculate_resonance_frequency("square", 0.5)

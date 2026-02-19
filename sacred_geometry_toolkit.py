@@ -13,6 +13,106 @@ from typing import Dict, Iterable, List, Sequence, Tuple
 Vector3 = Tuple[float, float, float]
 
 
+SHAPE_KNOWLEDGE_BASE: Dict[str, Dict[str, object]] = {
+    "point": {"family": "primitive", "dimension": 0, "sides": 0, "meaning": "origin and unity"},
+    "line": {"family": "primitive", "dimension": 1, "sides": 1, "meaning": "direction and connection"},
+    "circle": {"family": "planar", "dimension": 2, "sides": 0, "meaning": "wholeness and cycles"},
+    "ellipse": {"family": "planar", "dimension": 2, "sides": 0, "meaning": "orbital balance"},
+    "vesica piscis": {"family": "sacred", "dimension": 2, "sides": 0, "meaning": "duality and emergence"},
+    "triangle": {"family": "polygon", "dimension": 2, "sides": 3, "meaning": "triadic stability"},
+    "square": {"family": "polygon", "dimension": 2, "sides": 4, "meaning": "structure and order"},
+    "rectangle": {"family": "polygon", "dimension": 2, "sides": 4, "meaning": "grounded extension"},
+    "pentagon": {"family": "polygon", "dimension": 2, "sides": 5, "meaning": "organic growth"},
+    "hexagon": {"family": "polygon", "dimension": 2, "sides": 6, "meaning": "harmony and efficiency"},
+    "heptagon": {"family": "polygon", "dimension": 2, "sides": 7, "meaning": "mystic alignment"},
+    "octagon": {"family": "polygon", "dimension": 2, "sides": 8, "meaning": "transition and balance"},
+    "enneagon": {"family": "polygon", "dimension": 2, "sides": 9, "meaning": "completion cycle"},
+    "decagon": {"family": "polygon", "dimension": 2, "sides": 10, "meaning": "structured expansion"},
+    "hendecagon": {"family": "polygon", "dimension": 2, "sides": 11, "meaning": "threshold patterning"},
+    "dodecagon": {"family": "polygon", "dimension": 2, "sides": 12, "meaning": "cosmic order"},
+    "hexagram": {"family": "star", "dimension": 2, "sides": 6, "meaning": "union of opposites"},
+    "pentagram": {"family": "star", "dimension": 2, "sides": 5, "meaning": "proportional life-force"},
+    "star tetrahedron": {"family": "star", "dimension": 3, "sides": 8, "meaning": "dynamic polarity"},
+    "seed of life": {"family": "sacred", "dimension": 2, "sides": 0, "meaning": "creation template"},
+    "egg of life": {"family": "sacred", "dimension": 3, "sides": 0, "meaning": "developmental matrix"},
+    "flower of life": {"family": "sacred", "dimension": 2, "sides": 0, "meaning": "unified field pattern"},
+    "fruit of life": {"family": "sacred", "dimension": 3, "sides": 0, "meaning": "informational lattice"},
+    "metatron's cube": {"family": "sacred", "dimension": 3, "sides": 0, "meaning": "platonic connectivity"},
+    "sri yantra": {"family": "sacred", "dimension": 2, "sides": 0, "meaning": "concentric consciousness"},
+    "torus": {"family": "surface", "dimension": 3, "sides": 0, "meaning": "self-renewing flow"},
+    "sphere": {"family": "surface", "dimension": 3, "sides": 0, "meaning": "perfect symmetry"},
+    "tetrahedron": {"family": "platonic", "dimension": 3, "sides": 4, "meaning": "fire and initiation"},
+    "cube": {"family": "platonic", "dimension": 3, "sides": 6, "meaning": "earth and stability"},
+    "octahedron": {"family": "platonic", "dimension": 3, "sides": 8, "meaning": "air and balance"},
+    "dodecahedron": {"family": "platonic", "dimension": 3, "sides": 12, "meaning": "ether and synthesis"},
+    "icosahedron": {"family": "platonic", "dimension": 3, "sides": 20, "meaning": "water and flow"},
+    "merkaba": {"family": "sacred", "dimension": 3, "sides": 8, "meaning": "field propulsion metaphor"},
+    "fibonacci spiral": {"family": "growth", "dimension": 2, "sides": 0, "meaning": "iterative scaling"},
+    "golden spiral": {"family": "growth", "dimension": 2, "sides": 0, "meaning": "phi resonance"},
+    "golden rectangle": {"family": "growth", "dimension": 2, "sides": 4, "meaning": "harmonic proportion"},
+    "phi grid": {"family": "growth", "dimension": 2, "sides": 0, "meaning": "ratio scaffolding"},
+    "mandala": {"family": "sacred", "dimension": 2, "sides": 0, "meaning": "centered complexity"},
+    "labyrinth": {"family": "path", "dimension": 2, "sides": 0, "meaning": "guided traversal"},
+    "fractal tree": {"family": "fractal", "dimension": 2, "sides": 0, "meaning": "recursive branching"},
+    "koch snowflake": {"family": "fractal", "dimension": 2, "sides": 0, "meaning": "infinite boundary"},
+    "sierpinski triangle": {"family": "fractal", "dimension": 2, "sides": 3, "meaning": "nested self-similarity"},
+}
+
+
+SYMBOLIC_KNOWLEDGE_BASE: Dict[str, Dict[str, object]] = {
+    "flower of life": {"domain": "cosmology", "value": 1, "keywords": ["creation", "unity", "interconnection"]},
+    "metatron's cube": {"domain": "geometry", "value": 2, "keywords": ["platonic", "network", "symmetry"]},
+    "sri yantra": {"domain": "meditation", "value": 3, "keywords": ["focus", "balance", "convergence"]},
+    "seed of life": {"domain": "origins", "value": 4, "keywords": ["seed", "birth", "potential"]},
+    "fruit of life": {"domain": "structure", "value": 5, "keywords": ["field", "nodes", "connections"]},
+    "merkaba": {"domain": "field-dynamics", "value": 6, "keywords": ["motion", "spin", "duality"]},
+    "vesica piscis": {"domain": "duality", "value": 7, "keywords": ["intersection", "bridge", "emergence"]},
+    "golden ratio": {"domain": "proportion", "value": 8, "keywords": ["phi", "aesthetics", "scaling"]},
+    "fibonacci spiral": {"domain": "growth", "value": 9, "keywords": ["sequence", "expansion", "nature"]},
+    "platonic solids": {"domain": "3d-geometry", "value": 10, "keywords": ["tetra", "cube", "dodecahedron"]},
+}
+
+
+ASTRO_SHAPE_MAPPING: Dict[int, str] = {
+    1: "circle",
+    2: "vesica piscis",
+    3: "triangle",
+    4: "square",
+    5: "pentagon",
+    6: "hexagon",
+    7: "heptagon",
+    8: "octagon",
+    9: "enneagon",
+    10: "decagon",
+    11: "hendecagon",
+    12: "dodecagon",
+    13: "flower of life",
+    14: "metatron's cube",
+    15: "sri yantra",
+    16: "seed of life",
+    17: "fruit of life",
+    18: "hexagram",
+    19: "pentagram",
+    20: "torus",
+    21: "tetrahedron",
+    22: "cube",
+    23: "octahedron",
+    24: "dodecahedron",
+    25: "icosahedron",
+    26: "merkaba",
+    27: "fibonacci spiral",
+    28: "golden spiral",
+    29: "golden rectangle",
+    30: "phi grid",
+    31: "mandala",
+    32: "labyrinth",
+    33: "fractal tree",
+    34: "koch snowflake",
+    35: "sierpinski triangle",
+    36: "star tetrahedron",
+}
+
+
 def text_to_sacred_geometry_codes(text: str) -> List[Dict[str, float | str]]:
     """Convert text to symbolic geometry codes.
 
@@ -28,7 +128,7 @@ def text_to_sacred_geometry_codes(text: str) -> List[Dict[str, float | str]]:
             continue
         ordinal = ord(ch)
         digital_root = 1 + ((ordinal - 1) % 9)
-        angle = (ordinal * 137.50776405) % 360  # golden-angle mapping
+        angle = (ordinal * 137.50776405) % 360
         harmonic = round((digital_root / 9.0) * phi, 6)
         codes.append(
             {
@@ -138,21 +238,52 @@ def generate_platonic_solid(solid: str, scale: float = 1.0) -> Dict[str, List]:
 
 def translate_astrological_numbers(numbers: Sequence[int]) -> List[Dict[str, str | int]]:
     """Translate chart numbers into symbolic geometry shapes."""
-    mapping = {
-        1: "circle",
-        2: "vesica piscis",
-        3: "triangle",
-        4: "square",
-        5: "pentagon",
-        6: "hexagon",
-        7: "heptagon",
-        8: "octagon",
-        9: "enneagon",
-        10: "decagon",
-        11: "star hendecagon",
-        12: "dodecagon",
-    }
-    return [{"number": n, "shape": mapping[((n - 1) % 12) + 1]} for n in numbers]
+    if not numbers:
+        return []
+    cycle = max(ASTRO_SHAPE_MAPPING.keys())
+    return [{"number": n, "shape": ASTRO_SHAPE_MAPPING[((n - 1) % cycle) + 1]} for n in numbers]
+
+
+def list_supported_shapes() -> List[str]:
+    """Return all known geometry shape tokens sorted alphabetically."""
+    return sorted(SHAPE_KNOWLEDGE_BASE.keys())
+
+
+def get_symbolic_profile(symbol: str) -> Dict[str, object]:
+    """Return a normalized symbolic record for sacred terms and shapes."""
+    key = symbol.strip().lower()
+    if key in SYMBOLIC_KNOWLEDGE_BASE:
+        profile = dict(SYMBOLIC_KNOWLEDGE_BASE[key])
+        profile["symbol"] = key
+        profile["type"] = "symbol"
+        return profile
+    if key in SHAPE_KNOWLEDGE_BASE:
+        profile = dict(SHAPE_KNOWLEDGE_BASE[key])
+        profile["symbol"] = key
+        profile["type"] = "shape"
+        return profile
+    raise KeyError(f"Unknown sacred symbol: {symbol}")
+
+
+def generate_symbolic_training_records() -> List[Dict[str, object]]:
+    """Build deterministic records for model fine-tuning and eval scaffolding."""
+    records: List[Dict[str, object]] = []
+    for name in list_supported_shapes():
+        shape = SHAPE_KNOWLEDGE_BASE[name]
+        prompt = f"Classify sacred geometry concept '{name}'"
+        completion = (
+            f"family={shape['family']};dimension={shape['dimension']};"
+            f"sides={shape['sides']};meaning={shape['meaning']}"
+        )
+        records.append({"prompt": prompt, "completion": completion, "source": "shape_knowledge"})
+    for name, payload in sorted(SYMBOLIC_KNOWLEDGE_BASE.items()):
+        prompt = f"Explain sacred symbol '{name}'"
+        completion = (
+            f"domain={payload['domain']};value={payload['value']};"
+            f"keywords={','.join(payload['keywords'])}"
+        )
+        records.append({"prompt": prompt, "completion": completion, "source": "symbol_knowledge"})
+    return records
 
 
 def seed_of_life_visualization(elements: Dict[str, float]) -> Dict[str, List[Dict[str, float | str]]]:
@@ -204,6 +335,11 @@ def calculate_resonance_frequency(shape: str, dimension: float, wave_speed: floa
         "square": 4,
         "pentagon": 5,
         "hexagon": 6,
+        "heptagon": 7,
+        "octagon": 8,
+        "enneagon": 9,
+        "decagon": 10,
+        "dodecagon": 12,
     }
     factor = perimeter_factors.get(shape)
     if factor is None:
@@ -293,3 +429,5 @@ if __name__ == "__main__":
     sample = "Harmony"
     print("Text codes:", text_to_sacred_geometry_codes(sample))
     print("Cube vertex count:", len(generate_platonic_solid("cube")["vertices"]))
+    print("Supported shapes:", len(list_supported_shapes()))
+    print("Training records:", len(generate_symbolic_training_records()))
