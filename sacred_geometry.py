@@ -1,141 +1,48 @@
-"""Sacred geometry coding helpers and a production-friendly 7D vector model.
-
-This module turns the user-provided sacred geometry mappings and 7D math notes
-into reusable Python code suitable for deployment-oriented software.
-"""
+"""Utilities for encoding sacred geometry terms from free-form text."""
 
 from __future__ import annotations
 
-import math
-from dataclasses import dataclass
-from typing import Iterable, List, Mapping
+import re
+from typing import Mapping
 
-# Canonical sacred-geometry mappings from the provided specification.
-GEOMETRY_DICT: Mapping[str, str] = {
-    "Seed of Life": "SOL",
-    "Flower of Life": "FOL",
-    "Metatron's Cube": "MC",
-    "Sri Yantra": "SY",
-    "Vesica Pisces": "VP",
-    "Platonic Solids": "PS",
-    "Golden Ratio": "GR",
-    "Torus": "T",
-    "Merkaba": "M",
-    "Tree of Life": "TOL",
+GEOMETRY_CODES: Mapping[str, str] = {
+    "circle": "001",
+    "triangle": "002",
+    "square": "003",
+    "pentagon": "004",
+    "hexagon": "005",
 }
 
-SYMBOL_CODES: Mapping[str, str] = {
-    "circle": "C1",
-    "triangle": "T1",
-    "square": "S1",
-    "pentagon": "P1",
-    "hexagon": "H1",
-    "seed_of_life": "SOL1",
-    "flower_of_life": "FOL1",
-    "metatrons_cube": "MC1",
-}
-
-CODING_SYSTEM: Mapping[str, str] = {
-    "Seed of Life": "01",
-    "Flower of Life": "02",
-    "Metatron's Cube": "03",
-    "Sri Yantra": "04",
-    "Tree of Life": "05",
+SACRED_GEOMETRY_VALUES: Mapping[str, int] = {
+    "flower of life": 1,
+    "metatron's cube": 2,
+    "sri yantra": 3,
+    "seed of life": 4,
+    "fruit of life": 5,
 }
 
 
-def extract_keywords(input_text: str) -> List[str]:
-    """Extract supported sacred-geometry terms from free text.
+def sacred_geometry_code(input_text: str, *, geometry_dict: Mapping[str, str] | None = None) -> str:
+    """Return concatenated 3-digit codes for any known shapes in ``input_text``.
 
-    Returns canonical keys used by ``CODING_SYSTEM``.
+    The parser is case-insensitive and ignores punctuation.
     """
 
-    lowered = input_text.lower()
-    aliases = {
-        "seed of life": "Seed of Life",
-        "flower of life": "Flower of Life",
-        "metatron's cube": "Metatron's Cube",
-        "metatrons cube": "Metatron's Cube",
-        "sri yantra": "Sri Yantra",
-        "tree of life": "Tree of Life",
-    }
-    return [canonical for alias, canonical in aliases.items() if alias in lowered]
+    shape_codes = geometry_dict or GEOMETRY_CODES
+    normalized = re.sub(r"[^a-zA-Z\s]", " ", input_text).lower()
+    return "".join(shape_codes[word] for word in normalized.split() if word in shape_codes)
 
 
-def map_to_symbol(input_text: str) -> List[str]:
-    """Map natural-language text to sacred-geometry numeric codes."""
+def sacred_symbol_value(symbol: str, *, symbol_dict: Mapping[str, int] | None = None) -> int:
+    """Lookup a sacred geometry symbol value in a case-insensitive way."""
 
-    keywords = extract_keywords(input_text)
-    return [CODING_SYSTEM[key] for key in keywords if key in CODING_SYSTEM]
+    values = symbol_dict or SACRED_GEOMETRY_VALUES
+    key = symbol.strip().lower()
+    if key not in values:
+        raise KeyError(f"Unknown sacred geometry symbol: {symbol}")
+    return values[key]
 
 
-@dataclass(frozen=True)
-class Vector7D:
-    """A strict 7-dimensional real vector with common ML-friendly operations."""
-
-    coords: tuple[float, float, float, float, float, float, float]
-
-    def __init__(self, *coords: float):
-        if len(coords) != 7:
-            raise ValueError("Vector7D requires exactly 7 coordinates")
-        object.__setattr__(self, "coords", tuple(float(value) for value in coords))
-
-    @classmethod
-    def from_list(cls, values: Iterable[float]) -> "Vector7D":
-        values_tuple = tuple(values)
-        return cls(*values_tuple)
-
-    def to_list(self) -> List[float]:
-        return list(self.coords)
-
-    def __str__(self) -> str:
-        return "(" + ", ".join(f"{coord:g}" for coord in self.coords) + ")"
-
-    def __getitem__(self, index: int) -> float:
-        return self.coords[index]
-
-    def __add__(self, other: "Vector7D") -> "Vector7D":
-        return Vector7D(*(a + b for a, b in zip(self.coords, other.coords)))
-
-    def __sub__(self, other: "Vector7D") -> "Vector7D":
-        return Vector7D(*(a - b for a, b in zip(self.coords, other.coords)))
-
-    def __mul__(self, scalar: float) -> "Vector7D":
-        return Vector7D(*(a * scalar for a in self.coords))
-
-    def __rmul__(self, scalar: float) -> "Vector7D":
-        return self.__mul__(scalar)
-
-    def dot_product(self, other: "Vector7D") -> float:
-        return sum(a * b for a, b in zip(self.coords, other.coords))
-
-    def norm(self) -> float:
-        return math.sqrt(sum(coord**2 for coord in self.coords))
-
-    def distance(self, other: "Vector7D") -> float:
-        return (self - other).norm()
-
-    def cosine_similarity(self, other: "Vector7D") -> float:
-        left_norm = self.norm()
-        right_norm = other.norm()
-        if left_norm == 0 or right_norm == 0:
-            return 0.0
-        return self.dot_product(other) / (left_norm * right_norm)
-
-    def normalize(self) -> "Vector7D":
-        magnitude = self.norm()
-        if magnitude == 0:
-            return Vector7D(*(0.0 for _ in range(7)))
-        return Vector7D(*(coord / magnitude for coord in self.coords))
-
-    def project_onto(self, basis: Iterable["Vector7D"]) -> "Vector7D":
-        """Project this vector onto the span of the provided basis vectors.
-
-        The basis is assumed to be orthonormal. Non-orthonormal support could be
-        added later through Gram-Schmidt or least-squares projection.
-        """
-
-        total = Vector7D(*(0.0 for _ in range(7)))
-        for vector in basis:
-            total = total + (self.dot_product(vector) * vector)
-        return total
+if __name__ == "__main__":
+    input_text = "Draw a circle around the square and connect it to the triangle"
+    print(sacred_geometry_code(input_text))
