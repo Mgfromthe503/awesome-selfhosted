@@ -5,36 +5,58 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from mm_language_framework import MMFramework, FuturisticQuantumKeyGenerator as MMFQKG
+try:
+    from mm_language_framework import MMFramework, FuturisticQuantumKeyGenerator as MMFQKG
+
+    _HAS_MM_FRAMEWORK = True
+except Exception:
+    MMFramework = None
+    MMFQKG = None
+    _HAS_MM_FRAMEWORK = False
+
 from sherlock_training_data import (
     EmojiParser,
     FuturisticQuantumKeyGenerator as SherlockFQKG,
     emoji_translator,
     mm_emoji_knowledge_base,
+    sherlock_training_capabilities,
     spiritual_meanings,
-    build_sherlock_embedded_data,
 )
 
 
 def build_training_snapshot() -> dict:
-    mm = MMFramework(rng_seed=1337)
     parser = EmojiParser()
-    return {
-        "mm": {
+    capabilities = sherlock_training_capabilities()
+
+    if _HAS_MM_FRAMEWORK:
+        mm = MMFramework(rng_seed=1337)
+        mm_payload = {
             "hermetic_principles": mm.hermetic_principles,
             "emoji_translator": mm.emoji_translator,
             "elements": mm.elements,
-        },
+        }
+        mm_methods = [m for m in dir(MMFQKG) if not m.startswith("_")]
+    else:
+        mm_payload = {
+            "hermetic_principles": {},
+            "emoji_translator": {},
+            "elements": {},
+        }
+        mm_methods = []
+
+    return {
+        "mm": mm_payload,
         "sherlock": {
             "emoji_parser_map": parser.emoji_map,
             "emoji_translator": emoji_translator,
             "mm_emoji_knowledge_base": mm_emoji_knowledge_base,
             "spiritual_meanings": spiritual_meanings,
             "futuristic_qkg_methods": [m for m in dir(SherlockFQKG) if not m.startswith("_")],
-            "embedded_data": build_sherlock_embedded_data(),
+            "capabilities": capabilities,
+            "alpha_training_export_available": capabilities.get("alpha_mind_gamma_export", False),
         },
         "mm_access": {
-            "futuristic_qkg_methods": [m for m in dir(MMFQKG) if not m.startswith("_")],
+            "futuristic_qkg_methods": mm_methods,
         },
     }
 

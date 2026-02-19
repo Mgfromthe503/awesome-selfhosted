@@ -1,6 +1,7 @@
 """Training-data-oriented stubs and semantic mappings for Sherlock."""
 
 from statistics import mean, pstdev
+from pathlib import Path
 
 
 class EmojiParser:
@@ -399,167 +400,27 @@ def main_training_demo():
         "emoji_translation": translate_emoji("🌞"),
     }
 
+try:
+    from alpha_mind_gamma_model import export_training_jsonl as alpha_export_training_jsonl
 
-# Consolidated Sherlock AI scaffolding (deduplicated and dependency-light)
-import copy
-import datetime
-import hashlib
-import logging
+    _HAS_ALPHA_MIND_GAMMA = True
+except Exception:
+    alpha_export_training_jsonl = None
+    _HAS_ALPHA_MIND_GAMMA = False
 
-logging.basicConfig(filename="sherlock_log.txt", level=logging.INFO)
-
-
-class Vector12D:
-    """Simple 12D state vector used by SherlockAI for embedded signals."""
-
-    def __init__(self, coords):
-        if len(coords) != 12:
-            raise ValueError("Vector12D requires exactly 12 coordinates")
-        self.coords = [float(v) for v in coords]
-
-    def embed_scalar(self, value):
-        scalar = float(value)
-        self.coords = [x + scalar for x in self.coords]
-
-    def embed_vector(self, vector):
-        if len(vector) != 12:
-            raise ValueError("Embedded vector requires exactly 12 coordinates")
-        self.coords = [x + float(v) for x, v in zip(self.coords, vector)]
-
-    def embed_data(self, data):
-        if isinstance(data, (int, float)):
-            self.embed_scalar(data)
-            return
-        if isinstance(data, (list, tuple)):
-            self.embed_vector(data)
-            return
-        raise TypeError("data must be numeric scalar or 12-length sequence")
+def export_alpha_training_jsonl(path="data/processed/alpha_training.jsonl", size=300, seed=143, train_ratio=0.8):
+    """Export Alpha Mind Gamma prompt/completion JSONL for Sherlock fine-tuning."""
+    if not _HAS_ALPHA_MIND_GAMMA:
+        raise RuntimeError("alpha_mind_gamma_model is not available")
+    out = Path(path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    return str(alpha_export_training_jsonl(out, size=size, seed=seed, train_ratio=train_ratio))
 
 
-class Block:
-    """Minimal blockchain-style block for traceable transaction embedding."""
-
-    def __init__(self, previous_hash, transaction):
-        self.transaction = transaction if isinstance(transaction, list) else [str(transaction)]
-        self.previous_hash = previous_hash
-        string_to_hash = "".join(self.transaction) + previous_hash
-        self.block_hash = hashlib.sha256(string_to_hash.encode("utf-8")).hexdigest()
-
-
-class SherlockAI:
-    """Merged Sherlock runtime for dataset preprocessing, action history, and embeddings."""
-
-    def __init__(self, name="Sherlock", owner="unknown", birthday=None):
-        self.name = name
-        self.owner = owner
-        self.birthday = birthday or datetime.date(2020, 1, 1)
-        self.state = Vector12D([0.0] * 12)
-        self.history = []
-        self.action_history = []
-        self.datasets = {}
-        self.sound_library = {}
-        self.blockchain = []
-
-    def get_age(self):
-        return (datetime.date.today() - self.birthday).days // 365
-
-    def load_dataset(self, name, data):
-        self.datasets[name] = data
-
-    def preprocess_data(self, name):
-        data = self.datasets.get(name)
-        if data is None:
-            raise KeyError(f"Unknown dataset: {name}")
-
-        # Normalize numeric matrix-like input to [0, 1] range column-wise.
-        matrix = [list(map(float, row)) for row in data]
-        if not matrix:
-            self.datasets[name] = []
-            return []
-
-        cols = len(matrix[0])
-        mins = [min(row[c] for row in matrix) for c in range(cols)]
-        maxs = [max(row[c] for row in matrix) for c in range(cols)]
-
-        def norm(v, i):
-            span = maxs[i] - mins[i]
-            return 0.0 if span == 0 else (v - mins[i]) / span
-
-        processed = [[norm(row[c], c) for c in range(cols)] for row in matrix]
-        self.datasets[name] = processed
-        logging.info("Preprocessed dataset: %s (%d rows)", name, len(processed))
-        return processed
-
-    def add_sound(self, sound_name, sound_data):
-        self.sound_library[sound_name] = sound_data
-
-    def simulate_echo(self, sound_data):
-        return sound_data * 2
-
-    def ping_sound(self, sound_name):
-        if sound_name not in self.sound_library:
-            return None
-        return self.simulate_echo(self.sound_library[sound_name])
-
-    def perform_action(self, action, data=None):
-        self.history.append(copy.deepcopy(self.state))
-        if data is not None:
-            self.state.embed_data(data)
-        result = self.execute_action(action)
-        logging.info("Performed action: %s, Result: %s", action, result)
-        self.action_history.append((action, data, result))
-        return result
-
-    def execute_action(self, action):
-        self.state = Vector12D([x + 1 for x in self.state.coords])
-        return f"action executed: {action}"
-
-    def rollback(self):
-        if not self.history:
-            logging.info("No previous state to roll back to.")
-            return False
-        self.state = self.history.pop()
-        logging.info("SherlockAI rolled back to state: %s", self.state.coords)
-        return True
-
-    def add_transaction_block(self, transaction):
-        previous = self.blockchain[-1].block_hash if self.blockchain else "GENESIS"
-        block = Block(previous, transaction)
-        self.blockchain.append(block)
-        return block
-
-    def simple_sentiment(self, text):
-        positive = {"love", "great", "excellent", "good", "amazing"}
-        negative = {"hate", "bad", "awful", "terrible", "worse"}
-        words = {w.strip(".,!?:;\"'").lower() for w in str(text).split()}
-        score = len(words & positive) - len(words & negative)
-        if score > 0:
-            return "POSITIVE"
-        if score < 0:
-            return "NEGATIVE"
-        return "NEUTRAL"
-
-
-transaction1 = ["Alice sends 1 BTC to Bob"]
-transaction2 = ["Bob sends 0.5 BTC to Charlie"]
-transaction3 = ["Charlie sends 0.2 BTC to Alice"]
-
-
-def build_sherlock_embedded_data():
-    """Build deterministic embedded demo data for snapshot/export use."""
-    sherlock = SherlockAI(owner="codex")
-    sherlock.load_dataset("risk_analysis", [[1, 10, 100], [2, 20, 80], [3, 30, 60]])
-    sherlock.preprocess_data("risk_analysis")
-    sherlock.perform_action("analyze risk", data=1)
-    sherlock.perform_action("secure data", data=[0] * 11 + [2])
-    sherlock.add_sound("ping", "echo")
-    sherlock.add_transaction_block(transaction1)
-    sherlock.add_transaction_block(transaction2)
-    sherlock.add_transaction_block(transaction3)
+def sherlock_training_capabilities():
     return {
-        "state": sherlock.state.coords,
-        "actions": sherlock.action_history,
-        "sentiment_demo": sherlock.simple_sentiment("I love using Sherlock AI"),
-        "sound_echo": sherlock.ping_sound("ping"),
-        "block_hashes": [b.block_hash for b in sherlock.blockchain],
+        "alpha_mind_gamma_export": _HAS_ALPHA_MIND_GAMMA,
+        "emoji_parser_symbols": len(EmojiParser().emoji_map),
+        "emoji_translator_symbols": len(emoji_translator),
+        "knowledge_base_symbols": len(mm_emoji_knowledge_base),
     }

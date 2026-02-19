@@ -489,55 +489,7 @@
       "entangle_and_teleport",
       "generate_quantum_key",
       "get_error_corrected_key"
-    ],
-    "embedded_data": {
-      "state": [
-        3.0,
-        3.0,
-        3.0,
-        3.0,
-        3.0,
-        3.0,
-        3.0,
-        3.0,
-        3.0,
-        3.0,
-        3.0,
-        5.0
-      ],
-      "actions": [
-        [
-          "analyze risk",
-          1,
-          "action executed: analyze risk"
-        ],
-        [
-          "secure data",
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            2
-          ],
-          "action executed: secure data"
-        ]
-      ],
-      "sentiment_demo": "POSITIVE",
-      "sound_echo": "echoecho",
-      "block_hashes": [
-        "264a3083719098d5745cc35d36c9ab3f660df33c8468e827b4abee9d43234c04",
-        "5550bb8bd1aad0d1fffa9ff551d4727356389902e73795a0916b290b103429f1",
-        "c4b858c3de8474d2217fa7333b5da21c3a9785799e017a5c52c8441d7d4c7082"
-      ]
-    }
+    ]
   },
   "mm_access": {
     "futuristic_qkg_methods": [
