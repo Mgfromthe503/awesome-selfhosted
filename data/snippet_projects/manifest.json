@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "source": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_inbox\\20260218_233100_double_snake_import_os.py",
+    "destination": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_projects\\mm_ai_models\\20260218_233100_double_snake_import_os.py",
+    "assigned_project": "mm_ai_models",
+    "score": 3
+  },
+  {
+    "source": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_inbox\\math-lab__example_snippet.py",
+    "destination": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_projects\\mm_utilities\\math-lab__example_snippet.py",
+    "assigned_project": "mm_utilities",
+    "score": 1
+  },
+  {
+    "source": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_inbox\\physics-lab__example_snippet.py",
+    "destination": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_projects\\mm_physics_models\\physics-lab__example_snippet.py",
+    "assigned_project": "mm_physics_models",
+    "score": 1
+  },
+  {
+    "source": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_inbox\\theory-of-everything__einstein_relation.tex",
+    "destination": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_projects\\mm_utilities\\theory-of-everything__einstein_relation.tex",
+    "assigned_project": "mm_utilities",
+    "score": 1
+  },
+  {
+    "source": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_inbox\\theory-of-everything__example_snippet.py",
+    "destination": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_projects\\mm_unclassified\\theory-of-everything__example_snippet.py",
+    "assigned_project": "mm_unclassified",
+    "score": 0
+  },
+  {
+    "source": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_inbox\\theory-of-everything__wave_equation.tex",
+    "destination": "C:\\Users\\mindy\\dev\\physics_hybrid_lab\\data\\snippet_projects\\mm_physics_models\\theory-of-everything__wave_equation.tex",
+    "assigned_project": "mm_physics_models",
+    "score": 2
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "allowed_purposes": [
+    "missing_person_search",
+    "fraud_investigation",
+    "threat_assessment",
+    "public_safety_investigation"
+  ],
+  "allowed_source_types": [
+    "public_records",
+    "open_social_posts",
+    "licensed_cctv_feed",
+    "news_reports",
+    "tip_line"
+  ],
+  "require_case_id": true,
+  "require_legal_basis": true,
+  "require_supervisor_approval_for_sensitive": true
+}
