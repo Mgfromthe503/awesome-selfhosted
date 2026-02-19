@@ -261,6 +261,63 @@ emoji_translator = {
 }
 
 
+mm_emoji_knowledge_base = {
+    "📜": ("Scroll", "Wisdom, knowledge, history", "Ancient document used for recording information", "Represents tradition, learning, and legacy"),
+    "🔖": ("Bookmark", "Memory, importance, focus", "Used to mark important information", "Represents attention to detail and organization"),
+    "📲": ("Mobile Phone", "Communication, connectivity, social", "Portable communication device", "Represents modern connection and social interaction"),
+    "📝": ("Memo", "Notes, recording, reminders", "Used to record ideas or tasks", "Represents planning and memory"),
+    "🧳": ("Luggage", "Travel, journey, adventure", "Bag used for carrying personal items", "Represents life journey and experiences"),
+    "🗺️": ("Map", "Exploration, discovery, guidance", "Used to find directions", "Represents direction and adventure"),
+    "🛡️": ("Shield", "Protection, defense, security", "Symbol of safeguarding", "Represents strength and resilience"),
+    "🚧": ("Construction Barrier", "Caution, limitations, roadblocks", "Used to indicate construction or caution", "Represents challenges and temporary barriers"),
+    "💸": ("Money with Wings", "Wealth, financial outflow, spending", "Symbol of losing or spending money", "Represents material desires and financial flow"),
+    "💰": ("Money Bag", "Wealth, prosperity, abundance", "Symbol of wealth", "Represents success and prosperity"),
+    "🍀": ("Four-Leaf Clover", "Luck, fortune, blessings", "Rare variation of clover plant", "Represents good luck and positive outcomes"),
+    "🐞": ("Ladybug", "Good luck, protection, prosperity", "Insect associated with luck", "Represents fortune and protection"),
+    "🚶": ("Walking Person", "Movement, progress, journey", "Person walking forward", "Represents personal journey and forward momentum"),
+    "🏃": ("Running Person", "Speed, urgency, activity", "Person in motion", "Represents fast progress and action"),
+    "🌈": ("Rainbow", "Hope, diversity, promise", "Natural spectrum of light", "Represents beauty after challenges"),
+    "🌪️": ("Tornado", "Destruction, chaos, transformation", "Powerful windstorm", "Represents intense change and unpredictability"),
+    "🔦": ("Flashlight", "Guidance, visibility, insight", "Tool for creating light in darkness", "Represents clarity and discovery"),
+    "💡": ("Light Bulb", "Idea, innovation, inspiration", "Symbol of creative ideas", "Represents thinking and enlightenment"),
+    "🔧": ("Wrench", "Repair, problem-solving, adjustment", "Tool for mechanical repairs", "Represents fixing and adapting"),
+    "🔨": ("Hammer", "Strength, building, action", "Tool for construction", "Represents determination and creation"),
+    "🌌": ("Milky Way", "Mystery, cosmos, infinity", "Galaxy containing our solar system", "Represents vastness and cosmic connection"),
+    "🛸": ("UFO", "Mystery, unknown, curiosity", "Unidentified flying object", "Represents the unknown and exploration beyond Earth"),
+    "🎓": ("Graduation Cap", "Achievement, education, success", "Worn during graduation ceremonies", "Represents accomplishment and learning"),
+    "🏅": ("Sports Medal", "Achievement, excellence, competition", "Award for sports or competitions", "Represents skill and recognition"),
+    "🔮": ("Crystal Ball", "Mysticism, foresight, reflection", "Tool for scrying or divination", "Represents intuition and seeing beyond the obvious"),
+    "🪞": ("Mirror", "Self-reflection, awareness, truth", "Reflective surface", "Represents introspection and honesty"),
+    "🌋": ("Volcano", "Intensity, eruption, creation", "Mountain that erupts with lava", "Represents intense emotions and earth’s power"),
+    "🦚": ("Peacock", "Beauty, pride, prosperity", "Bird with colorful feathers", "Represents self-expression and confidence"),
+    "🎉": ("Party Popper", "Celebration, joy, festivity", "Used for parties and events", "Represents happiness and togetherness"),
+    "🎂": ("Birthday Cake", "Milestone, celebration, life", "Cake with candles", "Represents age, achievement, and joy"),
+    "👏": ("Clapping Hands", "Support, applause, recognition", "Gesture of encouragement", "Represents appreciation and motivation"),
+    "🤝": ("Handshake", "Agreement, partnership, trust", "Gesture of cooperation", "Represents collaboration and unity"),
+    "🤖": ("Robot", "Technology, automation, innovation", "Machine with human-like qualities", "Represents advancement and artificial intelligence"),
+    "🧠": ("Brain", "Thinking, cognition, intellect", "Organ associated with thought", "Represents intelligence and knowledge"),
+    "🕊️": ("Dove", "Peace, hope, purity", "Symbol of calm and non-violence", "Represents serenity and goodwill"),
+    "💆": ("Person Getting Massage", "Relaxation, healing, care", "Represents stress relief and comfort", "Associated with self-care and health"),
+    "🪄": ("Magic Wand", "Magic, transformation, possibility", "Tool for casting spells", "Represents potential and change"),
+    "🧿": ("Evil Eye", "Protection, warding off negativity", "Amulet in many cultures", "Represents protection and safety"),
+    "🏠": ("House", "Home, family, security", "Building for living", "Represents comfort and belonging"),
+    "🌐": ("Globe", "Connection, community, Earth", "Symbol of the world", "Represents unity and shared experiences"),
+    "🤲": ("Palms Up Together", "Support, help, offering", "Gesture of giving or receiving", "Represents kindness and support"),
+    "👨‍👩‍👧‍👦": ("Family", "Togetherness, love, support", "Group of family members", "Represents unity and familial bonds"),
+    "🎨": ("Palette", "Creativity, art, expression", "Tool for mixing colors", "Represents inspiration and artistic endeavors"),
+    "✏️": ("Pencil", "Writing, creativity, ideas", "Tool for recording thoughts", "Represents creativity and planning"),
+    "🔔": ("Bell", "Alert, attention, announcement", "Device for making sound", "Represents call to action or reminder"),
+    "📌": ("Pushpin", "Reminder, importance, focus", "Used to pin information", "Represents attention and memory"),
+    "🚨": ("Police Light", "Alert, emergency, caution", "Signifies urgency or danger", "Represents awareness and response"),
+    "🏳️‍🌈": ("Rainbow Flag", "Diversity, pride, inclusivity", "Symbol of LGBTQ+ community", "Represents acceptance and support"),
+    "🌄": ("Sunrise", "Hope, new beginnings, renewal", "Start of a new day", "Represents potential and optimism"),
+    "⏳": ("Hourglass", "Time, patience, inevitability", "Device for measuring time", "Represents the passage and value of time"),
+    "⚔️": ("Crossed Swords", "Conflict, bravery, courage", "Symbol of battle", "Represents strength and readiness"),
+    "💣": ("Bomb", "Destruction, explosive change, end", "Symbol of volatility", "Represents intense transformation and upheaval"),
+    "💥": ("Collision", "Impact, energy, sudden event", "Represents surprise or conflict", "Represents sudden change and energy release"),
+}
+
+
 def translate_emoji(emoji):
     return emoji_translator.get(emoji, "Unknown Emoji")
 
@@ -340,4 +397,169 @@ def main_training_demo():
         "agent_reaction": a1.react(a2),
         "quantum_key": quantum_key_generation(5),
         "emoji_translation": translate_emoji("🌞"),
+    }
+
+
+# Consolidated Sherlock AI scaffolding (deduplicated and dependency-light)
+import copy
+import datetime
+import hashlib
+import logging
+
+logging.basicConfig(filename="sherlock_log.txt", level=logging.INFO)
+
+
+class Vector12D:
+    """Simple 12D state vector used by SherlockAI for embedded signals."""
+
+    def __init__(self, coords):
+        if len(coords) != 12:
+            raise ValueError("Vector12D requires exactly 12 coordinates")
+        self.coords = [float(v) for v in coords]
+
+    def embed_scalar(self, value):
+        scalar = float(value)
+        self.coords = [x + scalar for x in self.coords]
+
+    def embed_vector(self, vector):
+        if len(vector) != 12:
+            raise ValueError("Embedded vector requires exactly 12 coordinates")
+        self.coords = [x + float(v) for x, v in zip(self.coords, vector)]
+
+    def embed_data(self, data):
+        if isinstance(data, (int, float)):
+            self.embed_scalar(data)
+            return
+        if isinstance(data, (list, tuple)):
+            self.embed_vector(data)
+            return
+        raise TypeError("data must be numeric scalar or 12-length sequence")
+
+
+class Block:
+    """Minimal blockchain-style block for traceable transaction embedding."""
+
+    def __init__(self, previous_hash, transaction):
+        self.transaction = transaction if isinstance(transaction, list) else [str(transaction)]
+        self.previous_hash = previous_hash
+        string_to_hash = "".join(self.transaction) + previous_hash
+        self.block_hash = hashlib.sha256(string_to_hash.encode("utf-8")).hexdigest()
+
+
+class SherlockAI:
+    """Merged Sherlock runtime for dataset preprocessing, action history, and embeddings."""
+
+    def __init__(self, name="Sherlock", owner="unknown", birthday=None):
+        self.name = name
+        self.owner = owner
+        self.birthday = birthday or datetime.date(2020, 1, 1)
+        self.state = Vector12D([0.0] * 12)
+        self.history = []
+        self.action_history = []
+        self.datasets = {}
+        self.sound_library = {}
+        self.blockchain = []
+
+    def get_age(self):
+        return (datetime.date.today() - self.birthday).days // 365
+
+    def load_dataset(self, name, data):
+        self.datasets[name] = data
+
+    def preprocess_data(self, name):
+        data = self.datasets.get(name)
+        if data is None:
+            raise KeyError(f"Unknown dataset: {name}")
+
+        # Normalize numeric matrix-like input to [0, 1] range column-wise.
+        matrix = [list(map(float, row)) for row in data]
+        if not matrix:
+            self.datasets[name] = []
+            return []
+
+        cols = len(matrix[0])
+        mins = [min(row[c] for row in matrix) for c in range(cols)]
+        maxs = [max(row[c] for row in matrix) for c in range(cols)]
+
+        def norm(v, i):
+            span = maxs[i] - mins[i]
+            return 0.0 if span == 0 else (v - mins[i]) / span
+
+        processed = [[norm(row[c], c) for c in range(cols)] for row in matrix]
+        self.datasets[name] = processed
+        logging.info("Preprocessed dataset: %s (%d rows)", name, len(processed))
+        return processed
+
+    def add_sound(self, sound_name, sound_data):
+        self.sound_library[sound_name] = sound_data
+
+    def simulate_echo(self, sound_data):
+        return sound_data * 2
+
+    def ping_sound(self, sound_name):
+        if sound_name not in self.sound_library:
+            return None
+        return self.simulate_echo(self.sound_library[sound_name])
+
+    def perform_action(self, action, data=None):
+        self.history.append(copy.deepcopy(self.state))
+        if data is not None:
+            self.state.embed_data(data)
+        result = self.execute_action(action)
+        logging.info("Performed action: %s, Result: %s", action, result)
+        self.action_history.append((action, data, result))
+        return result
+
+    def execute_action(self, action):
+        self.state = Vector12D([x + 1 for x in self.state.coords])
+        return f"action executed: {action}"
+
+    def rollback(self):
+        if not self.history:
+            logging.info("No previous state to roll back to.")
+            return False
+        self.state = self.history.pop()
+        logging.info("SherlockAI rolled back to state: %s", self.state.coords)
+        return True
+
+    def add_transaction_block(self, transaction):
+        previous = self.blockchain[-1].block_hash if self.blockchain else "GENESIS"
+        block = Block(previous, transaction)
+        self.blockchain.append(block)
+        return block
+
+    def simple_sentiment(self, text):
+        positive = {"love", "great", "excellent", "good", "amazing"}
+        negative = {"hate", "bad", "awful", "terrible", "worse"}
+        words = {w.strip(".,!?:;\"'").lower() for w in str(text).split()}
+        score = len(words & positive) - len(words & negative)
+        if score > 0:
+            return "POSITIVE"
+        if score < 0:
+            return "NEGATIVE"
+        return "NEUTRAL"
+
+
+transaction1 = ["Alice sends 1 BTC to Bob"]
+transaction2 = ["Bob sends 0.5 BTC to Charlie"]
+transaction3 = ["Charlie sends 0.2 BTC to Alice"]
+
+
+def build_sherlock_embedded_data():
+    """Build deterministic embedded demo data for snapshot/export use."""
+    sherlock = SherlockAI(owner="codex")
+    sherlock.load_dataset("risk_analysis", [[1, 10, 100], [2, 20, 80], [3, 30, 60]])
+    sherlock.preprocess_data("risk_analysis")
+    sherlock.perform_action("analyze risk", data=1)
+    sherlock.perform_action("secure data", data=[0] * 11 + [2])
+    sherlock.add_sound("ping", "echo")
+    sherlock.add_transaction_block(transaction1)
+    sherlock.add_transaction_block(transaction2)
+    sherlock.add_transaction_block(transaction3)
+    return {
+        "state": sherlock.state.coords,
+        "actions": sherlock.action_history,
+        "sentiment_demo": sherlock.simple_sentiment("I love using Sherlock AI"),
+        "sound_echo": sherlock.ping_sound("ping"),
+        "block_hashes": [b.block_hash for b in sherlock.blockchain],
     }

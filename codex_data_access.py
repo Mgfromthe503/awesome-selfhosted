@@ -6,7 +6,14 @@ import json
 from pathlib import Path
 
 from mm_language_framework import MMFramework, FuturisticQuantumKeyGenerator as MMFQKG
-from sherlock_training_data import EmojiParser, FuturisticQuantumKeyGenerator as SherlockFQKG, emoji_translator, spiritual_meanings
+from sherlock_training_data import (
+    EmojiParser,
+    FuturisticQuantumKeyGenerator as SherlockFQKG,
+    emoji_translator,
+    mm_emoji_knowledge_base,
+    spiritual_meanings,
+    build_sherlock_embedded_data,
+)
 
 
 def build_training_snapshot() -> dict:
@@ -21,8 +28,10 @@ def build_training_snapshot() -> dict:
         "sherlock": {
             "emoji_parser_map": parser.emoji_map,
             "emoji_translator": emoji_translator,
+            "mm_emoji_knowledge_base": mm_emoji_knowledge_base,
             "spiritual_meanings": spiritual_meanings,
             "futuristic_qkg_methods": [m for m in dir(SherlockFQKG) if not m.startswith("_")],
+            "embedded_data": build_sherlock_embedded_data(),
         },
         "mm_access": {
             "futuristic_qkg_methods": [m for m in dir(MMFQKG) if not m.startswith("_")],
