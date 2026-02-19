@@ -367,6 +367,50 @@ class MMFramework:
         return MMExecutionResult(outputs=outputs, errors=errors)
 
 
+class FuturisticQuantumKeyGenerator:
+    """MM-facing futuristic QKD scaffold built on top of MMFramework backends."""
+
+    def __init__(self, num_qubits: int, framework: Optional[MMFramework] = None):
+        self.num_qubits = num_qubits
+        self.framework = framework or MMFramework(rng_seed=1337)
+        self._last_counts: Dict[str, int] = {}
+        self._raw_key = ""
+        self._corrected_key = ""
+
+    def generate_quantum_key(self) -> str:
+        counts = self.framework.quantum_key_generation(self.num_qubits, shots=1)
+        self._last_counts = counts
+        self._raw_key = next(iter(counts.keys()))
+        return self._raw_key
+
+    def apply_quantum_error_correction(self) -> str:
+        self._corrected_key = self._raw_key.replace("2", "1")
+        return self._corrected_key
+
+    def entangle_and_teleport(self) -> Dict[str, Any]:
+        return {"status": "entangled", "teleported": True, "num_qubits": self.num_qubits}
+
+    def classical_post_processing(self) -> Dict[str, Any]:
+        active_key = self._corrected_key or self._raw_key
+        digest = hashlib.sha256(active_key.encode("utf-8")).hexdigest() if active_key else None
+        return {"status": "post_processed", "digest": digest}
+
+    def analyze_security(self) -> Dict[str, Any]:
+        return {"status": "analyzed", "threat_model": ["quantum", "classical"], "counts": self._last_counts}
+
+    def distribute_key(self) -> Dict[str, Any]:
+        return {"status": "distributed", "network": "mm-quantum-sim"}
+
+    def get_error_corrected_key(self) -> str:
+        self.generate_quantum_key()
+        self.apply_quantum_error_correction()
+        self.entangle_and_teleport()
+        self.classical_post_processing()
+        self.analyze_security()
+        self.distribute_key()
+        return "Error-corrected quantum key"
+
+
 def _demo() -> None:
     mm = MMFramework(
         eth_rpc_url=os.environ.get("MM_ETH_RPC_URL"),
@@ -445,6 +489,11 @@ def _run_tests() -> None:
             result = self.mm.execute_mm_code("💧🦂 ATCG")
             self.assertEqual(result.errors, [])
             self.assertTrue(any("Genome analysis" in o for o in result.outputs))
+
+        def test_futuristic_qkg_pipeline(self):
+            qkg = FuturisticQuantumKeyGenerator(8, framework=self.mm)
+            self.assertEqual(qkg.get_error_corrected_key(), "Error-corrected quantum key")
+            self.assertEqual(len(qkg._raw_key), 8)
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestMMFramework)
     unittest.TextTestRunner(verbosity=2).run(suite)

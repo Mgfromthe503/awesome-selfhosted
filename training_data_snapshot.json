@@ -160,6 +160,26 @@
       "🔥": "Transformation and energy",
       "💧": "Emotion and intuition",
       "🌿": "Growth and healing"
-    }
+    },
+    "futuristic_qkg_methods": [
+      "analyze_security",
+      "apply_quantum_error_correction",
+      "classical_post_processing",
+      "distribute_key",
+      "entangle_and_teleport",
+      "generate_quantum_key",
+      "get_error_corrected_key"
+    ]
+  },
+  "mm_access": {
+    "futuristic_qkg_methods": [
+      "analyze_security",
+      "apply_quantum_error_correction",
+      "classical_post_processing",
+      "distribute_key",
+      "entangle_and_teleport",
+      "generate_quantum_key",
+      "get_error_corrected_key"
+    ]
   }
 }
