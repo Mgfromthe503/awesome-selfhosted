@@ -1,0 +1,185 @@
+{
+  "mm": {
+    "hermetic_principles": {
+      "Correspondence": "As above, so below; as within, so without.",
+      "Vibration": "Nothing rests; everything moves; everything vibrates.",
+      "Polarity": "Everything has its opposite; opposites differ in degree.",
+      "Rhythm": "Everything flows in cycles and patterns.",
+      "Cause & Effect": "Every cause has its effect; every effect has its cause.",
+      "Gender": "Masculine and feminine principles are present in everything."
+    },
+    "emoji_translator": {
+      "🔥": "fire - elemental force of transformation, passion, and energy",
+      "💧": "water - elemental force of emotion, intuition, and adaptability",
+      "💨": "air - elemental force of intellect, communication, and movement",
+      "🌍": "earth - elemental force of stability, grounding, and material world",
+      "🌕": "Full Moon - culmination, realization, heightened emotions",
+      "🌑": "New Moon - new beginnings, intentions, rebirth",
+      "🔴": "Root Chakra (Muladhara) - grounding, survival, security",
+      "🟠": "Sacral Chakra (Svadhisthana) - emotions, creativity, sexuality",
+      "🟡": "Solar Plexus Chakra (Manipura) - will, power, self-esteem",
+      "🟢": "Heart Chakra (Anahata) - love, compassion, forgiveness",
+      "🔵": "Throat Chakra (Vishuddha) - communication, truth, expression",
+      "🟣": "Third Eye Chakra (Ajna) - intuition, insight, imagination",
+      "⚪": "Crown Chakra (Sahasrara) - spirituality, enlightenment",
+      "♈": "Aries - cardinal fire sign, initiation, and leadership",
+      "♉": "Taurus - fixed earth sign, stability, and determination",
+      "♊": "Gemini - mutable air sign, communication, and adaptability",
+      "♋": "Cancer - cardinal water sign, emotion, and nurturing",
+      "♌": "Leo - fixed fire sign, creativity, and self-expression",
+      "♍": "Virgo - mutable earth sign, analysis, and service",
+      "♎": "Libra - cardinal air sign, balance, and harmony",
+      "♏": "Scorpio - fixed water sign, transformation, and depth",
+      "♐": "Sagittarius - mutable fire sign, exploration, and philosophy",
+      "♑": "Capricorn - cardinal earth sign, discipline, and structure",
+      "♒": "Aquarius - fixed air sign, innovation, and community",
+      "♓": "Pisces - mutable water sign, intuition, and dreams",
+      "1️⃣": "One - unity, beginning, and leadership",
+      "2️⃣": "Two - duality, partnership, and balance",
+      "3️⃣": "Three - creativity, expression, and growth",
+      "4️⃣": "Four - stability, foundation, and order",
+      "5️⃣": "Five - change, freedom, and adventure",
+      "6️⃣": "Six - harmony, family, and responsibility",
+      "7️⃣": "Seven - introspection, spirituality, and mystery",
+      "8️⃣": "Eight - abundance, power, and karma",
+      "9️⃣": "Nine - completion, wisdom, and humanitarianism",
+      "🔄": "Principle of Correspondence - As above, so below; as below, so above",
+      "⚖️": "Principle of Polarity - opposites are identical in nature but differ in degree",
+      "🌊": "Principle of Vibration - everything is in motion and has its own frequency",
+      "🌱": "Principle of Rhythm - everything has its tides and cycles",
+      "🍇": "Principle of Cause and Effect - every cause has its effect",
+      "🧲": "Principle of Gender - masculine and feminine are present in everything",
+      "🔥🏹": "create new object (Sagittarius: Explorer)",
+      "🔥🦁": "major action/event (Leo: Leader)",
+      "🔥🐏": "start action/process (Aries: Initiator)",
+      "💧🦀": "user input/feedback (Cancer: Nurturer)",
+      "💧🦂": "analyze/process data (Scorpio: Investigator)",
+      "💧🐠": "display results (Pisces: Dreamer)",
+      "💨👬": "send data/message (Gemini: Communicator)",
+      "💨⚖️": "receive data/message (Libra: Harmonizer)",
+      "💨🏺": "network/database connection (Aquarius: Innovator)",
+      "🌍🐂": "save data (Taurus: Builder)",
+      "🌍👧": "load data (Virgo: Analyst)",
+      "🌍🐐": "memory management (Capricorn: Manager)",
+      "🍎": "red apple",
+      "💻": "laptop",
+      "🧬": "DNA - genetic code, heredity, and life's blueprint",
+      "🔬": "microscope - exploration of microscopic world and research",
+      "🧪": "test tube - experimentation, chemistry, and biology",
+      "🌞": "sun - source of light and energy for life",
+      "🌙": "moon - affects tides and influences biological rhythms",
+      "🌌": "milky way - our galaxy, star systems, cosmic vastness",
+      "🪐": "planet - celestial body, space, solar system",
+      "🔍": "search",
+      "💡": "idea",
+      "❤️": "love"
+    },
+    "elements": {
+      "fire": {
+        "signs": [
+          "Aries",
+          "Leo",
+          "Sagittarius"
+        ],
+        "commands": [
+          "🔥🏹",
+          "🔥🦁",
+          "🔥🐏"
+        ]
+      },
+      "water": {
+        "signs": [
+          "Cancer",
+          "Scorpio",
+          "Pisces"
+        ],
+        "commands": [
+          "💧🦀",
+          "💧🦂",
+          "💧🐠"
+        ]
+      },
+      "earth": {
+        "signs": [
+          "Taurus",
+          "Virgo",
+          "Capricorn"
+        ],
+        "commands": [
+          "🌍🐂",
+          "🌍👧",
+          "🌍🐐"
+        ]
+      },
+      "air": {
+        "signs": [
+          "Gemini",
+          "Libra",
+          "Aquarius"
+        ],
+        "commands": [
+          "💨👬",
+          "💨⚖️",
+          "💨🏺"
+        ]
+      }
+    }
+  },
+  "sherlock": {
+    "emoji_parser_map": {
+      "🧠": "brain - representing cognitive processes and mental health",
+      "🔮": "prediction - symbolizing foresight and AI predictions",
+      "🕵️": "investigation - indicating deep analysis or exploration",
+      "🌐": "global - representing worldwide connectivity or global data",
+      "🧬": "DNA - symbolizing bioinformatics and genetic research",
+      "💾": "data storage - indicating information processing and memory",
+      "🌌": "cosmos - representing expansive thinking or astronomical data",
+      "🕒": "time - symbolizing temporal analysis or historical data",
+      "🖼️": "visualization - representing data visualization techniques",
+      "🧪": "experiment - indicating scientific research and experimentation",
+      "🔥": "fire - transformation and energy",
+      "💧": "water - emotion and intuition",
+      "🌿": "plant - growth and healing"
+    },
+    "emoji_translator": {
+      "🔥": "fire",
+      "💧": "water",
+      "💨": "air",
+      "🌍": "earth",
+      "🌞": "sun - source of light and energy for all life on Earth",
+      "🌙": "moon - affects tides and influences biological rhythms",
+      "🧲": "magnet - magnetism, attraction, and physics",
+      "🧬": "DNA - genetic code, heredity, and life's blueprint",
+      "🌌": "milky way - our galaxy, star systems, and cosmic vastness",
+      "6️⃣": "Six - harmony, family, and responsibility",
+      "7️⃣": "Seven - introspection, spirituality, and mystery",
+      "8️⃣": "Eight - abundance, power, and karma",
+      "9️⃣": "Nine - completion, wisdom, and humanitarianism"
+    },
+    "spiritual_meanings": {
+      "🔥": "Transformation and energy",
+      "💧": "Emotion and intuition",
+      "🌿": "Growth and healing"
+    },
+    "futuristic_qkg_methods": [
+      "analyze_security",
+      "apply_quantum_error_correction",
+      "classical_post_processing",
+      "distribute_key",
+      "entangle_and_teleport",
+      "generate_quantum_key",
+      "get_error_corrected_key"
+    ]
+  },
+  "mm_access": {
+    "futuristic_qkg_methods": [
+      "analyze_security",
+      "apply_quantum_error_correction",
+      "classical_post_processing",
+      "distribute_key",
+      "entangle_and_teleport",
+      "generate_quantum_key",
+      "get_error_corrected_key"
+    ]
+  }
+}
