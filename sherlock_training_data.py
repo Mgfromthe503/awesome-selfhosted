@@ -341,3 +341,85 @@ def main_training_demo():
         "quantum_key": quantum_key_generation(5),
         "emoji_translation": translate_emoji("🌞"),
     }
+
+# Condensed Sherlock crime/ML integration helpers (deduplicated from exploratory snippets)
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Iterable, Optional
+
+
+@dataclass
+class CrimeStory:
+    title: str
+    description: str
+    author: str
+    date: str
+    story_id: Optional[str] = None
+
+    @classmethod
+    def from_map(cls, payload, story_id=None):
+        date = payload.get("date")
+        if isinstance(date, datetime):
+            date = date.isoformat()
+        return cls(
+            title=payload.get("title", ""),
+            description=payload.get("description", ""),
+            author=payload.get("author", ""),
+            date=str(date or ""),
+            story_id=story_id,
+        )
+
+    def to_map(self):
+        return asdict(self)
+
+
+def normalize_crime_stories(records):
+    """Normalize Firebase-style dict payloads into CrimeStory objects."""
+    stories = []
+    for key, value in (records or {}).items():
+        stories.append(CrimeStory.from_map(value or {}, story_id=key))
+    return stories
+
+
+def add_crime_story_local(store, title, description, author, date):
+    """Local, dependency-free stand-in for adding a story to realtime DB."""
+    story_id = f"story_{len(store) + 1}"
+    store[story_id] = CrimeStory(title, description, author, str(date), story_id).to_map()
+    return story_id
+
+
+def build_crime_classifier(input_shape=(28, 28, 1), learning_rate=0.001, num_filters=32, num_neurons=64):
+    """Single deduplicated CNN builder used by training and optional grid search."""
+    try:
+        import tensorflow as tf
+    except Exception as exc:  # pragma: no cover - optional dependency
+        raise RuntimeError("TensorFlow is required to build the crime classifier") from exc
+
+    model = tf.keras.Sequential(
+        [
+            tf.keras.layers.Conv2D(num_filters, (3, 3), activation="relu", input_shape=input_shape),
+            tf.keras.layers.MaxPooling2D((2, 2)),
+            tf.keras.layers.Conv2D(num_filters * 2, (3, 3), activation="relu"),
+            tf.keras.layers.MaxPooling2D((2, 2)),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(num_neurons, activation="relu", kernel_regularizer=tf.keras.regularizers.l2(0.001)),
+            tf.keras.layers.Dropout(0.5),
+            tf.keras.layers.Dense(1, activation="sigmoid"),
+        ]
+    )
+    model.compile(
+        loss="binary_crossentropy",
+        optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+        metrics=["accuracy"],
+    )
+    return model
+
+
+def summarize_incidents(incidents: Iterable[dict]):
+    """Condense live incident-like API responses into a stable summary."""
+    incidents = list(incidents or [])
+    by_type = {}
+    for incident in incidents:
+        key = incident.get("incident_code", "unknown")
+        by_type[key] = by_type.get(key, 0) + 1
+    return {"total": len(incidents), "by_type": by_type}
