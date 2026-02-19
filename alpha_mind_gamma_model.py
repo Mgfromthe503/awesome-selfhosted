@@ -6,8 +6,11 @@ NumPy/Pandas data processing and a small, explainable linear model.
 
 from __future__ import annotations
 
+import argparse
+import json
 from dataclasses import dataclass
-from typing import Iterable, Sequence
+from pathlib import Path
+from typing import Sequence
 
 import numpy as np
 import pandas as pd
@@ -106,6 +109,57 @@ def synthetic_dataset(size: int = 100, seed: int = 143) -> pd.DataFrame:
     return frame
 
 
+def _record_from_row(row: pd.Series, predicted: float) -> dict:
+    prompt = (
+        "Predict target_qlp from features: "
+        f"x={row['x']:.6f}, y={row['y']:.6f}, z={row['z']:.6f}, "
+        f"fire={row['fire']:.6f}, water={row['water']:.6f}, air={row['air']:.6f}, "
+        f"earth={row['earth']:.6f}, numerology={float(row['numerology']):.0f}, "
+        f"frequency={row['frequency']:.6f}, light_code={float(row['light_code']):.0f}."
+    )
+    completion = f"target_qlp={predicted:.6f}"
+    return {
+        "prompt": prompt,
+        "completion": completion,
+        "metadata": {
+            "source": "alpha_mind_gamma_model",
+            "task": "regression_estimation",
+        },
+    }
+
+
+def export_training_jsonl(
+    out_path: str | Path,
+    *,
+    size: int = 300,
+    seed: int = 143,
+    train_ratio: float = 0.8,
+) -> Path:
+    """Export prompt/completion JSONL examples for Sherlock fine-tuning."""
+    if size < 10:
+        raise ValueError("size must be >= 10")
+    if not (0.1 <= train_ratio <= 0.95):
+        raise ValueError("train_ratio must be between 0.1 and 0.95")
+
+    data = synthetic_dataset(size=size, seed=seed)
+    cutoff = int(size * train_ratio)
+    train = data.iloc[:cutoff]
+    infer = data.iloc[cutoff:]
+
+    model = AlphaMindGammaModel()
+    model.fit(train)
+    preds = model.predict(infer)
+
+    out = Path(out_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+
+    with out.open("w", encoding="utf-8") as fh:
+        for (_, row), pred in zip(infer.iterrows(), preds):
+            fh.write(json.dumps(_record_from_row(row, float(pred)), ensure_ascii=False) + "\n")
+
+    return out
+
+
 def run_demo() -> None:
     data = synthetic_dataset()
     train = data.iloc[:80]
@@ -119,5 +173,23 @@ def run_demo() -> None:
     print(f"Alpha Mind Gamma MAE: {mae:.4f}")
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--export-jsonl", type=Path, default=None, help="Write prompt/completion JSONL to this path.")
+    parser.add_argument("--size", type=int, default=300, help="Synthetic dataset size used for export.")
+    parser.add_argument("--seed", type=int, default=143, help="RNG seed for reproducible export.")
+    parser.add_argument("--train-ratio", type=float, default=0.8, help="Train split ratio before generating predictions.")
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    if args.export_jsonl:
+        out = export_training_jsonl(args.export_jsonl, size=args.size, seed=args.seed, train_ratio=args.train_ratio)
+        print(f"Wrote training JSONL: {out}")
+    else:
+        run_demo()
+
+
 if __name__ == "__main__":
-    run_demo()
+    main()
