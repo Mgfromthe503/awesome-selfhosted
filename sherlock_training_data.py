@@ -341,3 +341,270 @@ def main_training_demo():
         "quantum_key": quantum_key_generation(5),
         "emoji_translation": translate_emoji("🌞"),
     }
+
+
+# Sherlock framework-layer training structures
+PRINCIPLES = [
+    {
+        "PrincipleID": 1,
+        "Category": "Mentalism",
+        "Principle": "All is mind",
+        "SacredGeometry": "Fractal patterns",
+        "LifeScience": "Brainwaves & neural networks",
+        "SpiritualAspect": "Mind shapes reality",
+    },
+    {
+        "PrincipleID": 2,
+        "Category": "Correspondence",
+        "Principle": "As above, so below",
+        "SacredGeometry": "Flower of Life",
+        "LifeScience": "Phyllotaxis & spiral shells",
+        "SpiritualAspect": "Macro-micro harmony",
+    },
+    {
+        "PrincipleID": 3,
+        "Category": "Vibration",
+        "Principle": "Everything vibrates",
+        "SacredGeometry": "Cymatic wave lattice",
+        "LifeScience": "Cellular resonance",
+        "SpiritualAspect": "Sound-healing dynamics",
+    },
+    {
+        "PrincipleID": 4,
+        "Category": "Polarity",
+        "Principle": "Everything has two poles",
+        "SacredGeometry": "Yin-Yang torus",
+        "LifeScience": "Bioelectric gradients",
+        "SpiritualAspect": "Shadow-light synthesis",
+    },
+    {
+        "PrincipleID": 5,
+        "Category": "Rhythm",
+        "Principle": "Everything flows in cycles",
+        "SacredGeometry": "Sinusoidal spiral",
+        "LifeScience": "Circadian & tidal cycles",
+        "SpiritualAspect": "Breath of creation",
+    },
+    {
+        "PrincipleID": 6,
+        "Category": "Cause & Effect",
+        "Principle": "Nothing escapes law",
+        "SacredGeometry": "Fibonacci cascade",
+        "LifeScience": "Gene-regulatory networks",
+        "SpiritualAspect": "Karmic feedback",
+    },
+    {
+        "PrincipleID": 7,
+        "Category": "Gender",
+        "Principle": "Masculine & feminine manifest on every plane",
+        "SacredGeometry": "Rebis dual helix",
+        "LifeScience": "Chromosomal dimorphism",
+        "SpiritualAspect": "Divine gender balance",
+    },
+    {
+        "PrincipleID": 8,
+        "Category": "Attraction",
+        "Principle": "Like energy attracts like",
+        "SacredGeometry": "Magnetron vortex",
+        "LifeScience": "Chemotaxis & quorum sensing",
+        "SpiritualAspect": "Manifestation mechanics",
+    },
+    {
+        "PrincipleID": 9,
+        "Category": "Perpetual Transmutation",
+        "Principle": "Energy constantly transforms",
+        "SacredGeometry": "Mobius infinity loop",
+        "LifeScience": "ATP / oxidative cycles",
+        "SpiritualAspect": "Alchemy of being",
+    },
+    {
+        "PrincipleID": 10,
+        "Category": "Compensation",
+        "Principle": "Balance through equivalence",
+        "SacredGeometry": "Balanced tetrahedron",
+        "LifeScience": "Homeostasis",
+        "SpiritualAspect": "Equanimity law",
+    },
+    {
+        "PrincipleID": 11,
+        "Category": "Relativity",
+        "Principle": "Truth is comparative",
+        "SacredGeometry": "Relativistic grid",
+        "LifeScience": "Adaptive evolution",
+        "SpiritualAspect": "Perspective shifts",
+    },
+    {
+        "PrincipleID": 12,
+        "Category": "Divine Oneness",
+        "Principle": "All is connected",
+        "SacredGeometry": "Merkaba star-tetrahedron",
+        "LifeScience": "Pan-genomic networks",
+        "SpiritualAspect": "Universal nexus",
+    },
+]
+
+_PRINCIPLE_EMOJIS = ["🧠", "🔗", "🌊", "☯️", "🔁", "⚙️", "⚧️", "🧲", "♻️", "⚖️", "🌌", "✨"]
+
+
+def _blank_vector(size=12):
+    return [0.0] * size
+
+
+PRINCIPLE_ASSET = [
+    {
+        "PrincipleID": item["PrincipleID"],
+        "Emoji": _PRINCIPLE_EMOJIS[item["PrincipleID"] - 1],
+        "Vector12D": _blank_vector(),
+        "ModuleHook": "",
+        "GeometryAsset": None,
+    }
+    for item in PRINCIPLES
+]
+
+EMOJI_MAP = {
+    "🧠": 1,
+    "💭": 1,
+    "ℳ": 1,
+    "🔗": 2,
+    "🔄": 2,
+    "⇅": 2,
+    "🌊": 3,
+    "🎶": 3,
+    "𝜈": 3,
+    "☯️": 4,
+    "⚫": 4,
+    "⚪": 4,
+    "±": 4,
+    "🔁": 5,
+    "~": 5,
+    "⚙️": 6,
+    "⛓️": 6,
+    "⇒": 6,
+    "⚧️": 7,
+    "⚤": 7,
+    "𝜒": 7,
+    "🧲": 8,
+    "➕": 8,
+    "⊕": 8,
+    "♻️": 9,
+    "∞": 9,
+    "⚖️": 10,
+    "🪙": 10,
+    "=": 10,
+    "🌌": 11,
+    "🧭": 11,
+    "≈": 11,
+    "✨": 12,
+    "🕉️": 12,
+    "●": 12,
+}
+
+
+def parse_principles(text):
+    found = []
+    keys = sorted(EMOJI_MAP.keys(), key=len, reverse=True)
+    index = 0
+    while index < len(text):
+        match = None
+        for key in keys:
+            if text.startswith(key, index):
+                match = key
+                break
+        if match is not None:
+            value = EMOJI_MAP[match]
+            if value not in found:
+                found.append(value)
+            index += len(match)
+        else:
+            index += 1
+    return found
+
+
+def principle_create(code, name, description="", functions=None):
+    return {
+        "Code": code,
+        "Name": name,
+        "Description": description,
+        "Functions": [] if functions is None else list(functions),
+    }
+
+
+def geometry_design_create(name, pattern, description=""):
+    return {"Name": name, "Pattern": pattern, "Description": description}
+
+
+def life_science_create(connection, biological_system, description=""):
+    return {
+        "Connection": connection,
+        "BiologicalSystem": biological_system,
+        "Description": description,
+    }
+
+
+def spiritual_aspect_create(description, practices=None):
+    return {"Description": description, "Practices": [] if practices is None else list(practices)}
+
+
+class DNA_System:
+    def __init__(self):
+        self.principles = []
+        self.sacred_geometry = []
+        self.life_science_connections = []
+        self.spiritual_aspects = []
+        self.quantum_state = {}
+
+    def integrate_principle(self, principle):
+        new_obj = DNA_System()
+        new_obj.principles = self.principles + [principle]
+        new_obj.sacred_geometry = list(self.sacred_geometry)
+        new_obj.life_science_connections = list(self.life_science_connections)
+        new_obj.spiritual_aspects = list(self.spiritual_aspects)
+        new_obj.quantum_state = dict(self.quantum_state)
+        return new_obj
+
+    def analyze_data(self, data):
+        return {"Echo": data, "PrinciplesUsed": len(self.principles)}
+
+
+def book_create(title, author, content):
+    return {"Title": title, "Author": author, "Content": content}
+
+
+class Ethics:
+    def __init__(self):
+        self.biases = []
+        self.privacy_policies = []
+        self.transparency_reports = []
+
+    def check_for_bias(self, data):
+        return {"Checked": True, "Input": data}
+
+    def ensure_privacy(self, user):
+        return {"User": user, "Status": "OK"}
+
+    def provide_transparency(self):
+        return {"Report": "No secrets"}
+
+
+class Sherlock:
+    def __init__(self):
+        self.dna = DNA_System()
+        self.ethics = Ethics()
+        self.knowledge_base = []
+        self.multimodal_sensors = {}
+
+    def investigate(self, data):
+        return {"Findings": "Vector12D depth→12", "Principles": self.dna.principles, "Input": data}
+
+    def report(self, findings):
+        return "\n".join(f"{k}: {v}" for k, v in findings.items())
+
+    def seek_truth(self, data):
+        return self.dna.analyze_data(data)
+
+    def mental_health_support(self):
+        return "Call 988 (US) or local helpline"
+
+    def train_on_book(self, book):
+        self.knowledge_base.append(book)
+        return self
