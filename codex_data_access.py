@@ -12,6 +12,7 @@ from sherlock_training_data import (
     emoji_translator,
     mm_emoji_knowledge_base,
     spiritual_meanings,
+    build_sherlock_embedded_data,
 )
 
 
@@ -30,6 +31,7 @@ def build_training_snapshot() -> dict:
             "mm_emoji_knowledge_base": mm_emoji_knowledge_base,
             "spiritual_meanings": spiritual_meanings,
             "futuristic_qkg_methods": [m for m in dir(SherlockFQKG) if not m.startswith("_")],
+            "embedded_data": build_sherlock_embedded_data(),
         },
         "mm_access": {
             "futuristic_qkg_methods": [m for m in dir(MMFQKG) if not m.startswith("_")],
