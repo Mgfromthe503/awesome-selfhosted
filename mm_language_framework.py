@@ -366,6 +366,50 @@ class MMFramework:
 
         return MMExecutionResult(outputs=outputs, errors=errors)
 
+    def parse_emoji_command(self, command: str) -> str:
+        """Compatibility helper for single-line emoji command parsing."""
+        if not command:
+            return "Unknown emoji command"
+
+        result = self.execute_mm_code(command)
+        if result.outputs:
+            return result.outputs[0]
+        if result.errors:
+            return "Unknown emoji command"
+        return "Unknown emoji command"
+
+
+class BioinformaticsModule:
+    """Backwards-compatible bioinformatics facade."""
+
+    def __init__(self, framework: Optional[MMFramework] = None):
+        self.framework = framework or MMFramework()
+
+    def analyze_genome(self, genome_sequence: str) -> str:
+        return self.framework.analyze_genome(genome_sequence)
+
+
+class AstroDude(MMFramework.AstroDude):
+    """Backwards-compatible alias for top-level AstroDude."""
+
+
+class Agent(MMFramework.Agent):
+    """Backwards-compatible alias for top-level Agent."""
+
+
+class EmojiParser:
+    """Backwards-compatible single-command emoji parser."""
+
+    def __init__(self, framework: Optional[MMFramework] = None):
+        self.framework = framework or MMFramework()
+
+    def parse(self, emoji_command: str) -> str:
+        return self.framework.parse_emoji_command(emoji_command)
+
+
+class mmFramework(MMFramework):
+    """Legacy class-name alias retained for compatibility with older examples."""
+
 
 class FuturisticQuantumKeyGenerator:
     """MM-facing futuristic QKD scaffold built on top of MMFramework backends."""
@@ -494,6 +538,17 @@ def _run_tests() -> None:
             qkg = FuturisticQuantumKeyGenerator(8, framework=self.mm)
             self.assertEqual(qkg.get_error_corrected_key(), "Error-corrected quantum key")
             self.assertEqual(len(qkg._raw_key), 8)
+
+        def test_legacy_aliases(self):
+            legacy = mmFramework(rng_seed=1)
+            self.assertIsInstance(legacy, MMFramework)
+            self.assertIn("Fire", legacy.parse_emoji_command("🔥 alpha"))
+
+            parser = EmojiParser(framework=legacy)
+            self.assertIn("Water", parser.parse("💧 beta"))
+
+            bio = BioinformaticsModule(framework=legacy)
+            self.assertIn("Genome analysis", bio.analyze_genome("ATCG"))
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestMMFramework)
     unittest.TextTestRunner(verbosity=2).run(suite)
