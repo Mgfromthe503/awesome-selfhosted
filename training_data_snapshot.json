@@ -503,7 +503,12 @@
       "entangle_and_teleport",
       "generate_quantum_key",
       "get_error_corrected_key"
-    ]
+    ],
+    "polygon_staking_training_data": {
+      "name": "polygon_staking_automation",
+      "network": "polygon",
+      "script": "import os\nfrom dotenv import load_dotenv\nfrom web3 import Web3\nfrom brownie import Contract, project\n\nload_dotenv()\n\n# Set up the Polygon blockchain interface\npolygon_rpc_url = os.getenv('POLYGON_RPC_URL')\nw3 = Web3(Web3.HTTPProvider(polygon_rpc_url))\n\n# Update the contract addresses\ntoken_address = os.getenv('TOKEN_ADDRESS')\nstaking_address = os.getenv('STAKING_ADDRESS')\n\n# Update the gas prices\ngas_price = w3.toWei(os.getenv('GAS_PRICE_GWEI'), 'gwei')\nmax_gas = int(os.getenv('MAX_GAS'))\n\n# Connect to the token contract\ntry:\n    token_contract = Contract.from_abi('Token', address=token_address, abi=project.load('Token').abi)\nexcept Exception as e:\n    print(f\"Error connecting to token contract: {str(e)}\")\n    exit()\n\n# Connect to the staking contract\ntry:\n    staking_contract = Contract.from_abi('Staking', address=staking_address, abi=project.load('Staking').abi)\nexcept Exception as e:\n    print(f\"Error connecting to staking contract: {str(e)}\")\n    exit()\n\n# Perform the staking transaction\ndef stake_tokens(amount, account_address, private_key):\n    nonce = w3.eth.get_transaction_count(account_address)\n    tx = staking_contract.functions.stake(amount).buildTransaction({\n        'nonce': nonce,\n        'from': account_address,\n        'value': 0,\n        'gasPrice': gas_price,\n        'gas': max_gas,\n    })\n    signed_tx = w3.eth.account.sign_transaction(tx, private_key=private_key)\n    try:\n        tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)\n    except Exception as e:\n        print(f\"Error sending transaction: {str(e)}\")\n        return None\n    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)\n    return tx_receipt"
+    }
   },
   "mm_access": {
     "futuristic_qkg_methods": [

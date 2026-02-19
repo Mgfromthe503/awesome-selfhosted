@@ -1,5 +1,6 @@
 """Training-data-oriented stubs and semantic mappings for Sherlock."""
 
+from textwrap import dedent
 from statistics import mean, pstdev
 from pathlib import Path
 
@@ -288,61 +289,69 @@ emoji_translator = {
 }
 
 
-mm_emoji_knowledge_base = {
-    "📜": ("Scroll", "Wisdom, knowledge, history", "Ancient document used for recording information", "Represents tradition, learning, and legacy"),
-    "🔖": ("Bookmark", "Memory, importance, focus", "Used to mark important information", "Represents attention to detail and organization"),
-    "📲": ("Mobile Phone", "Communication, connectivity, social", "Portable communication device", "Represents modern connection and social interaction"),
-    "📝": ("Memo", "Notes, recording, reminders", "Used to record ideas or tasks", "Represents planning and memory"),
-    "🧳": ("Luggage", "Travel, journey, adventure", "Bag used for carrying personal items", "Represents life journey and experiences"),
-    "🗺️": ("Map", "Exploration, discovery, guidance", "Used to find directions", "Represents direction and adventure"),
-    "🛡️": ("Shield", "Protection, defense, security", "Symbol of safeguarding", "Represents strength and resilience"),
-    "🚧": ("Construction Barrier", "Caution, limitations, roadblocks", "Used to indicate construction or caution", "Represents challenges and temporary barriers"),
-    "💸": ("Money with Wings", "Wealth, financial outflow, spending", "Symbol of losing or spending money", "Represents material desires and financial flow"),
-    "💰": ("Money Bag", "Wealth, prosperity, abundance", "Symbol of wealth", "Represents success and prosperity"),
-    "🍀": ("Four-Leaf Clover", "Luck, fortune, blessings", "Rare variation of clover plant", "Represents good luck and positive outcomes"),
-    "🐞": ("Ladybug", "Good luck, protection, prosperity", "Insect associated with luck", "Represents fortune and protection"),
-    "🚶": ("Walking Person", "Movement, progress, journey", "Person walking forward", "Represents personal journey and forward momentum"),
-    "🏃": ("Running Person", "Speed, urgency, activity", "Person in motion", "Represents fast progress and action"),
-    "🌈": ("Rainbow", "Hope, diversity, promise", "Natural spectrum of light", "Represents beauty after challenges"),
-    "🌪️": ("Tornado", "Destruction, chaos, transformation", "Powerful windstorm", "Represents intense change and unpredictability"),
-    "🔦": ("Flashlight", "Guidance, visibility, insight", "Tool for creating light in darkness", "Represents clarity and discovery"),
-    "💡": ("Light Bulb", "Idea, innovation, inspiration", "Symbol of creative ideas", "Represents thinking and enlightenment"),
-    "🔧": ("Wrench", "Repair, problem-solving, adjustment", "Tool for mechanical repairs", "Represents fixing and adapting"),
-    "🔨": ("Hammer", "Strength, building, action", "Tool for construction", "Represents determination and creation"),
-    "🌌": ("Milky Way", "Mystery, cosmos, infinity", "Galaxy containing our solar system", "Represents vastness and cosmic connection"),
-    "🛸": ("UFO", "Mystery, unknown, curiosity", "Unidentified flying object", "Represents the unknown and exploration beyond Earth"),
-    "🎓": ("Graduation Cap", "Achievement, education, success", "Worn during graduation ceremonies", "Represents accomplishment and learning"),
-    "🏅": ("Sports Medal", "Achievement, excellence, competition", "Award for sports or competitions", "Represents skill and recognition"),
-    "🔮": ("Crystal Ball", "Mysticism, foresight, reflection", "Tool for scrying or divination", "Represents intuition and seeing beyond the obvious"),
-    "🪞": ("Mirror", "Self-reflection, awareness, truth", "Reflective surface", "Represents introspection and honesty"),
-    "🌋": ("Volcano", "Intensity, eruption, creation", "Mountain that erupts with lava", "Represents intense emotions and earth’s power"),
-    "🦚": ("Peacock", "Beauty, pride, prosperity", "Bird with colorful feathers", "Represents self-expression and confidence"),
-    "🎉": ("Party Popper", "Celebration, joy, festivity", "Used for parties and events", "Represents happiness and togetherness"),
-    "🎂": ("Birthday Cake", "Milestone, celebration, life", "Cake with candles", "Represents age, achievement, and joy"),
-    "👏": ("Clapping Hands", "Support, applause, recognition", "Gesture of encouragement", "Represents appreciation and motivation"),
-    "🤝": ("Handshake", "Agreement, partnership, trust", "Gesture of cooperation", "Represents collaboration and unity"),
-    "🤖": ("Robot", "Technology, automation, innovation", "Machine with human-like qualities", "Represents advancement and artificial intelligence"),
-    "🧠": ("Brain", "Thinking, cognition, intellect", "Organ associated with thought", "Represents intelligence and knowledge"),
-    "🕊️": ("Dove", "Peace, hope, purity", "Symbol of calm and non-violence", "Represents serenity and goodwill"),
-    "💆": ("Person Getting Massage", "Relaxation, healing, care", "Represents stress relief and comfort", "Associated with self-care and health"),
-    "🪄": ("Magic Wand", "Magic, transformation, possibility", "Tool for casting spells", "Represents potential and change"),
-    "🧿": ("Evil Eye", "Protection, warding off negativity", "Amulet in many cultures", "Represents protection and safety"),
-    "🏠": ("House", "Home, family, security", "Building for living", "Represents comfort and belonging"),
-    "🌐": ("Globe", "Connection, community, Earth", "Symbol of the world", "Represents unity and shared experiences"),
-    "🤲": ("Palms Up Together", "Support, help, offering", "Gesture of giving or receiving", "Represents kindness and support"),
-    "👨‍👩‍👧‍👦": ("Family", "Togetherness, love, support", "Group of family members", "Represents unity and familial bonds"),
-    "🎨": ("Palette", "Creativity, art, expression", "Tool for mixing colors", "Represents inspiration and artistic endeavors"),
-    "✏️": ("Pencil", "Writing, creativity, ideas", "Tool for recording thoughts", "Represents creativity and planning"),
-    "🔔": ("Bell", "Alert, attention, announcement", "Device for making sound", "Represents call to action or reminder"),
-    "📌": ("Pushpin", "Reminder, importance, focus", "Used to pin information", "Represents attention and memory"),
-    "🚨": ("Police Light", "Alert, emergency, caution", "Signifies urgency or danger", "Represents awareness and response"),
-    "🏳️‍🌈": ("Rainbow Flag", "Diversity, pride, inclusivity", "Symbol of LGBTQ+ community", "Represents acceptance and support"),
-    "🌄": ("Sunrise", "Hope, new beginnings, renewal", "Start of a new day", "Represents potential and optimism"),
-    "⏳": ("Hourglass", "Time, patience, inevitability", "Device for measuring time", "Represents the passage and value of time"),
-    "⚔️": ("Crossed Swords", "Conflict, bravery, courage", "Symbol of battle", "Represents strength and readiness"),
-    "💣": ("Bomb", "Destruction, explosive change, end", "Symbol of volatility", "Represents intense transformation and upheaval"),
-    "💥": ("Collision", "Impact, energy, sudden event", "Represents surprise or conflict", "Represents sudden change and energy release"),
-}
+polygon_staking_training_script = dedent(
+    """
+    import os
+    from dotenv import load_dotenv
+    from web3 import Web3
+    from brownie import Contract, project
+
+    load_dotenv()
+
+    # Set up the Polygon blockchain interface
+    polygon_rpc_url = os.getenv('POLYGON_RPC_URL')
+    w3 = Web3(Web3.HTTPProvider(polygon_rpc_url))
+
+    # Update the contract addresses
+    token_address = os.getenv('TOKEN_ADDRESS')
+    staking_address = os.getenv('STAKING_ADDRESS')
+
+    # Update the gas prices
+    gas_price = w3.toWei(os.getenv('GAS_PRICE_GWEI'), 'gwei')
+    max_gas = int(os.getenv('MAX_GAS'))
+
+    # Connect to the token contract
+    try:
+        token_contract = Contract.from_abi('Token', address=token_address, abi=project.load('Token').abi)
+    except Exception as e:
+        print(f"Error connecting to token contract: {str(e)}")
+        exit()
+
+    # Connect to the staking contract
+    try:
+        staking_contract = Contract.from_abi('Staking', address=staking_address, abi=project.load('Staking').abi)
+    except Exception as e:
+        print(f"Error connecting to staking contract: {str(e)}")
+        exit()
+
+    # Perform the staking transaction
+    def stake_tokens(amount, account_address, private_key):
+        nonce = w3.eth.get_transaction_count(account_address)
+        tx = staking_contract.functions.stake(amount).buildTransaction({
+            'nonce': nonce,
+            'from': account_address,
+            'value': 0,
+            'gasPrice': gas_price,
+            'gas': max_gas,
+        })
+        signed_tx = w3.eth.account.sign_transaction(tx, private_key=private_key)
+        try:
+            tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        except Exception as e:
+            print(f"Error sending transaction: {str(e)}")
+            return None
+        tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+        return tx_receipt
+    """
+).strip()
+
+
+def get_polygon_staking_training_data():
+    return {
+        "name": "polygon_staking_automation",
+        "network": "polygon",
+        "script": polygon_staking_training_script,
+    }
 
 
 def translate_emoji(emoji):

@@ -10,8 +10,8 @@ from sherlock_training_data import (
     EmojiParser,
     FuturisticQuantumKeyGenerator as SherlockFQKG,
     emoji_translator,
+    get_polygon_staking_training_data,
     spiritual_meanings,
-    symbolic_meanings,
 )
 
 
@@ -44,8 +44,7 @@ def build_training_snapshot() -> dict:
             "spiritual_meanings": spiritual_meanings,
             "symbolic_meanings": symbolic_meanings,
             "futuristic_qkg_methods": [m for m in dir(SherlockFQKG) if not m.startswith("_")],
-            "capabilities": capabilities,
-            "alpha_training_export_available": capabilities.get("alpha_mind_gamma_export", False),
+            "polygon_staking_training_data": get_polygon_staking_training_data(),
         },
         "mm_access": {
             "futuristic_qkg_methods": mm_methods,
