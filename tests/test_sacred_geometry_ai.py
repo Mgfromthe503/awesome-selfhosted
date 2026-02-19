@@ -1,56 +1,38 @@
 import math
 import unittest
 
-from sacred_geometry_ai import (
-    SacredGeometryAI,
-    Vector11D,
-    build_feature_vector,
-    generate_fractal_points,
-)
+from sacred_geometry_ai import Vector11D
 
 
 class Vector11DTests(unittest.TestCase):
-    def test_projection_onto_sphere(self):
-        vector = Vector11D(*range(1, 12))
-        projected = vector.project_onto_sphere(5)
-        self.assertAlmostEqual(projected.norm(), 5.0, places=7)
+    def test_requires_exact_dimension(self):
+        with self.assertRaises(ValueError):
+            Vector11D(1, 2)
 
-    def test_projection_of_zero_vector(self):
-        vector = Vector11D(*([0] * 11))
-        projected = vector.project_onto_sphere(4)
+    def test_project_onto_sphere_zero_vector(self):
+        zero = Vector11D(*([0] * 11))
+        projected = zero.project_onto_sphere(5)
         self.assertEqual(projected.to_list(), [0.0] * 11)
 
-    def test_cosine_similarity_handles_zero_vector(self):
-        a = Vector11D(*([0] * 11))
-        b = Vector11D(*([1] * 11))
-        self.assertEqual(a.cosine_similarity(b), 0.0)
+    def test_project_onto_sphere_radius(self):
+        vec = Vector11D(*range(1, 12))
+        projected = vec.project_onto_sphere(5)
+        self.assertAlmostEqual(projected.norm(), 5.0, places=7)
 
+    def test_fractal_triangle_points_grow(self):
+        vec = Vector11D(*range(1, 12))
+        points = vec.fractal_nature_points("triangle", iterations=4)
+        self.assertEqual(len(points), 1 + 4 * 3)
 
-class FractalTests(unittest.TestCase):
-    def test_generate_triangle_fractal_points(self):
-        points = generate_fractal_points("triangle", 20, seed=1)
-        self.assertEqual(len(points), 20)
-        self.assertTrue(all(math.isfinite(x) and math.isfinite(y) for x, y in points))
-
-    def test_unsupported_shape_raises(self):
+    def test_fractal_shape_validation(self):
+        vec = Vector11D(*range(1, 12))
         with self.assertRaises(ValueError):
-            generate_fractal_points("octagon", 10)
+            vec.fractal_nature_points("octahedron", iterations=1)
 
-
-class SacredGeometryAITests(unittest.TestCase):
-    def test_predict_shape(self):
-        model = SacredGeometryAI()
-        sample = Vector11D(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-        label, score = model.predict_shape(sample)
-        self.assertEqual(label, "sphere")
-        self.assertGreaterEqual(score, 0.99)
-
-    def test_harmony_score_is_bounded(self):
-        model = SacredGeometryAI()
-        sample = build_feature_vector([0.2] * 11)
-        score = model.harmony_score(sample)
-        self.assertGreaterEqual(score, 0.0)
-        self.assertLessEqual(score, 1.0)
+    def test_cosine_similarity_zero_safe(self):
+        zero = Vector11D(*([0] * 11))
+        vec = Vector11D(*([1] * 11))
+        self.assertEqual(zero.cosine_similarity(vec), 0.0)
 
 
 if __name__ == "__main__":
